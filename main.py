@@ -12,7 +12,9 @@
 # See the Mulan PSL v2 for more details.
 # **********************************************************************************
 """
+import sys
 import argparse
+from src.utils.isocheck import IsoCheck
 
 class kyClassifier:
     @staticmethod
@@ -29,6 +31,8 @@ if __name__ == '__main__':
     parser.add_argument('-iso', type=str, help='Input ISO file path')
     args = parser.parse_args()
     if args.iso:
+        if not IsoCheck.check(args.iso):
+            sys.exit(1)
         kyClassifier.process_iso(args.iso)
 
 
