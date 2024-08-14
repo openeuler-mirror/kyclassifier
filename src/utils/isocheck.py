@@ -13,6 +13,7 @@
 # **********************************************************************************
 """
 import os
+import pycdlib
 
 ERROR_INFO={
     1001:"The ISO path does not exist. Please check if the entered ISO path is correct.",
@@ -30,8 +31,25 @@ class IsoCheck(object):
             return True
         
     def check_format(self):
-        pass
-    
+        try:
+            iso = pycdlib.PyCdlib()
+            iso.open(self.path)
+            os_dirs = [
+                'repodata',
+            ]
+            found_dirs = set()
+            for dirpath, dirnames, filenames in iso.walk(iso_path='/'):
+                dirname = dirpath.strip('/').lower()
+                if dirname in os_dirs:
+                    found_dirs.add(dirname)
+                else:
+                    continue
+            iso.close()
+            return True if found_dirs == set(os_dirs) else False
+        except Exception as e:
+            print("Error checking ISO: {}".format(str(e)))
+            return False
+        
     @classmethod
     def check(cls,iso_path):
         obj = cls(iso_path)
