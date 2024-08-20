@@ -35,3 +35,25 @@ class DepParse(object):
         dep_set.remove(pkg_name)
         return dep_set
 
+
+class ISODepParse(DepParse):
+    def __init__(self,iso_path):
+        super(ISODepParse,self).__init__()
+        self._iso_path = iso_path
+        # deps_dict   {pkg1:[pkg2,pkg3,...,pkgi]}
+        self.dep_dict = self._get_repo_pkg_deps()
+        self.dep_by_dict = self._get_repo_pkg_deps_by()
+        self.all_pkgs = self._get_all_pkgs()
+
+    def _get_all_pkgs(self):
+        if isinstance(self.dep_dict,dict):
+            res_set = set(self.dep_dict.keys())
+        else:
+            res_set = set()
+        return res_set
+
+    def _get_repo_pkg_deps(self):
+        pass
+
+    def _get_repo_pkg_deps_by(self):
+        pass
