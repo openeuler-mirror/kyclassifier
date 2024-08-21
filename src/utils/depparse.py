@@ -13,15 +13,27 @@
 # **********************************************************************************
 """
 
+import copy
 from collections import defaultdict
 
 class DepParse(object):
+    """
+        依赖解析模块
+    """
     def __init__(self):
         self.dep_dict = defaultdict(list)
         self.dep_by_dict = defaultdict(list)
         self.all_pkgs = set()
 
     def get_pkg_all_deps(self,pkg_name):
+        """
+            解析输入软件包的所有南向依赖软件包
+        Args:
+            pkg_name (string): 软件包名
+
+        Returns:
+            set: 南向依赖软件包集合
+        """
         dep_set = set()
         dep_pkgs_dict = self.dep_dict
         to_process = {pkg_name}
@@ -37,6 +49,9 @@ class DepParse(object):
 
 
 class ISODepParse(DepParse):
+    """
+        ISO软件包依赖解析模块
+    """
     def __init__(self,iso_path):
         super(ISODepParse,self).__init__()
         self._iso_path = iso_path
@@ -46,6 +61,11 @@ class ISODepParse(DepParse):
         self.all_pkgs = self._get_all_pkgs()
 
     def _get_all_pkgs(self):
+        """
+            解析iso中所有软件包名集合
+        Returns:
+            set: iso中所有软件包名集合
+        """
         if isinstance(self.dep_dict,dict):
             res_set = set(self.dep_dict.keys())
         else:
@@ -56,4 +76,26 @@ class ISODepParse(DepParse):
         pass
 
     def _get_repo_pkg_deps_by(self):
-        pass
+        """
+            解析软件包北向依赖关系
+        Returns:
+            dict: 软件包北向依赖关系字典
+        """
+        deps_by_dict = defaultdict(list)
+        dep_pkgs_dict = copy.deepcopy(self.dep_dict)
+        for p in dep_pkgs_dict.keys():
+            deps_by_dict[p]
+        for k,v in dep_pkgs_dict.items():
+            if not v:
+                continue
+            else:
+                for dep_pkg in v:
+                    tmp_k = dep_pkg
+                    if tmp_k not in deps_by_dict.keys():
+                        deps_by_dict[tmp_k] = [k]
+                    else:
+                        tmp_v = deps_by_dict.get(tmp_k)
+                        tmp_v.append(k)
+                        tmp_v = list(set(tmp_v))
+                        deps_by_dict[tmp_k] = tmp_v
+        return deps_by_dict

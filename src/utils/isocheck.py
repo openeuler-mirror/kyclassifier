@@ -21,16 +21,25 @@ ERROR_INFO={
 }
 
 class IsoCheck(object):
+    """
+        输入ISO检查模块,检查失败打印错误信息
+    """
     def __init__(self,path):
         self.path=path
         
     def check_exist(self):
+        """
+            检查文件存在性
+        """
         if not os.path.exists(self.path):
             return False
         else:
             return True
         
     def check_format(self):
+        """
+            检查iso格式是否正确
+        """
         try:
             iso = pycdlib.PyCdlib()
             iso.open(self.path)
@@ -52,6 +61,14 @@ class IsoCheck(object):
         
     @classmethod
     def check(cls,iso_path):
+        """
+            入口函数
+        Args:
+            iso_path (string): iso文件路径
+
+        Returns:
+            bool: True/False
+        """
         obj = cls(iso_path)
         if not obj.check_exist():
             print(ERROR_INFO.get(1001,''))
