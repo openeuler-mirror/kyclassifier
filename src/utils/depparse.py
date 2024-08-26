@@ -12,9 +12,10 @@
 # See the Mulan PSL v2 for more details.
 # **********************************************************************************
 """
-
+import os
 import copy
 from collections import defaultdict
+import isoparser
 
 class DepParse(object):
     """
@@ -99,3 +100,25 @@ class ISODepParse(DepParse):
                         tmp_v = list(set(tmp_v))
                         deps_by_dict[tmp_k] = tmp_v
         return deps_by_dict
+    
+
+class ISOUtils(object):
+    """
+        ISO处理工具类
+    """
+    
+    @staticmethod
+    def parse_iso_repodata(iso_path,repodata_dir='/opt/kyclassifier/iso_parse/repodata'):
+        """
+            解析ISO中repodata目录
+        Args:
+            iso_path (string): iso文件
+            repodata_dir (string, optional): repodata目录. Defaults to '/opt/kyclassifier/iso_parse/repodata'.
+        """
+        os.makedirs(repodata_dir,exist_ok=True)
+        iso = isoparser.parse(iso_path)
+        for repo in iso.record(b'repodata').children:
+            file_name = repo.name.decode('utf-8')
+            content = repo.get_stream().read()
+            with open(os.path.join(repodata_dir,file_name),'wb') as f:
+                f.write(content)
