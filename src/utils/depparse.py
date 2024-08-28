@@ -15,6 +15,7 @@
 import os
 import copy
 from collections import defaultdict
+from fnmatch import fnmatch
 import isoparser
 
 class DepParse(object):
@@ -122,3 +123,32 @@ class ISOUtils(object):
             content = repo.get_stream().read()
             with open(os.path.join(repodata_dir,file_name),'wb') as f:
                 f.write(content)
+
+    @staticmethod
+    def get_repo_from_dir(repodata_dir='/opt/kyclassifier/iso_parse/repodata'):
+        """
+            解析repodata目录中数据文件
+        Args:
+            repodata_dir (str, optional): repodata目录. Defaults to '/opt/kyclassifier/iso_parse/repodata'.
+        Returns:
+            tuple: ISO数据文件路径
+        """
+        repomd_fn = []
+        primary_fn = []
+        filelists_fn = []
+        path = repodata_dir
+        for res in os.walk(path):
+            files = res[-1]
+            for f in files:
+                if fnmatch(f,'repomd.xml'):
+                    repomd_fn.append(f)
+                elif fnmatch(f,'*primary.xml.*'):
+                    primary_fn.append(f)
+                elif fnmatch(f,'*filelists.xml.*'):
+                    filelists_fn.append(f)
+                else:
+                    continue
+        if any(len(x)!=1 for x in [repomd_fn,primary_fn,filelists_fn]):
+            raise FileExistsError
+        else:
+            return os.path.join(path,repomd_fn[0]),os.path.join(path,primary_fn[0]),os.path.join(path,filelists_fn[0])
