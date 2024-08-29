@@ -152,3 +152,16 @@ class ISOUtils(object):
             raise FileExistsError
         else:
             return os.path.join(path,repomd_fn[0]),os.path.join(path,primary_fn[0]),os.path.join(path,filelists_fn[0])
+
+    @classmethod
+    def parase_iso_repofile(cls,iso_path,target_dir='/opt/kyclassifier/iso_parse/repodata'):
+        """
+            解析ISO数据文件
+        Args:
+            iso_path (str): ISO文件
+            target_dir (string, optional): 数据文件保存目录. Defaults to '/opt/kyclassifier/iso_parse/repodata'.
+        Returns:
+            tuple: ISO数据文件路径
+        """
+        cls.parse_iso_repodata(iso_path,target_dir)
+        return cls.get_repo_from_dir()
