@@ -17,6 +17,7 @@ import copy
 from collections import defaultdict
 from fnmatch import fnmatch
 import isoparser
+import hawkey
 
 class DepParse(object):
     """
@@ -75,7 +76,26 @@ class ISODepParse(DepParse):
         return res_set
 
     def _get_repo_pkg_deps(self):
-        pass
+        """
+            解析软件包南向依赖关系
+        Returns:
+            dict: 软件包南向依赖关系字典
+        """
+        package_dep_d = defaultdict(list)
+        sack = hawkey.Sack()
+        repo = hawkey.Repo("repo_parse")
+        repo.repomd_fn,repo.primary_fn,repo.filelists_fn = ISOUtils.parase_iso_repofile(self._iso_path)
+        sack.load_repo(repo,load_filelists=True)
+        q = hawkey.Query(sack)
+        for p in q:
+            p_name = p.name
+            req_l = []
+            req_objs = q.filter(provides=p.requires)
+            for req_obj in req_objs:
+                req_pkgname = req_obj.name
+                req_l.append(req_pkgname)
+            package_dep_d[p_name] = req_l
+        return package_dep_d
 
     def _get_repo_pkg_deps_by(self):
         """
