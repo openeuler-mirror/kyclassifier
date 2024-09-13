@@ -106,3 +106,58 @@ class AlgLayer(object):
             visited_pkglist = list(set(visited_pkglist))
             res_dict[k] = list(set(res_dict[k]))
         return res_dict
+
+    @classmethod
+    def get_unlayered_pkgs(cls,id2pkgs_dict,all_pkgs_set):
+        """
+            获取还未分层软件包列表
+        Args:
+            id2pkgs_dict (dict): 输入分层字典
+            all_pkgs_set (set): 所有软件集合
+
+        Returns:
+            res: 未分层软件包列表
+        """
+        layered_pkgs = []
+        res = []
+        for k,v in id2pkgs_dict.items():
+            layered_pkgs += v
+        res = list(set(all_pkgs_set) - set(layered_pkgs))
+        return res
+
+    @classmethod
+    def get_layer_by_reqlayer(cls,id2pkgs_dict,unfilter_pkg_list,dep_obj):
+        """
+            通过依赖关系获取输入未分层软件包的层级
+        Args:
+            id2pkgs_dict (dict): 输入分层字典
+            unfilter_pkg_list (list): 未分层软件包列表
+            dep_obj : DepParse类对象
+
+        Returns:
+            res: 输出分层字典
+        """
+        tmp_dict = {k:[] for k in range(1,5)}
+        turn = 0
+        while True:
+            turn += 1
+            in_num = len(unfilter_pkg_list)
+            for p in copy.copy(unfilter_pkg_list):
+                p_deps_set = dep_obj.get_pkg_all_deps(p)
+                for id in range(4,0,-1):
+                    if p_deps_set & set(copy.copy(id2pkgs_dict[id])):
+                        tmp_dict[id] += list(p_deps_set)
+                        tmp_dict[id].append(p)
+                        unfilter_pkg_list = list(set(unfilter_pkg_list) - p_deps_set -set(p)) 
+                        break
+            out_num = len(unfilter_pkg_list)
+            condition = bool(in_num - out_num)
+            if condition:
+                continue
+            else:
+                tmp_dict[4] += unfilter_pkg_list
+                break
+        for i in range(1,5):
+            id2pkgs_dict[i] += tmp_dict[i]
+        id2pkgs_dict = cls.filter_duplicates(id2pkgs_dict)
+        return id2pkgs_dict
