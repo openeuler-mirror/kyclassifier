@@ -41,8 +41,24 @@ class AlgLayer(object):
         return res
     
     @classmethod
-    def run(cls):
-        pass
+    def run(cls,dep_obj,init_f):
+        """
+            分层算法模块入口函数
+        Args:
+            dep_obj : DepParse类对象
+            init_f (str): 初始化数据文件路径
+
+        Returns:
+            pkg2id_dict: 输出分层字典
+        """
+        obj = cls(dep_obj,init_f)
+        id2pkgs_dict = obj.filter_init_dict(obj.init_id2pkgs_dict,obj.all_pkgs_set)
+        id2pkgs_dict = cls.augment_layered_set(id2pkgs_dict,obj.dep_obj,add_no_depby_pkgs=True)
+        id2pkgs_dict = cls.filter_duplicates(id2pkgs_dict)
+        unfilter_pkg_list = cls.get_unlayered_pkgs(id2pkgs_dict,obj.all_pkgs_set)
+        final_id2pkgs_dict = cls.get_layer_by_reqlayer(id2pkgs_dict,unfilter_pkg_list,obj.dep_obj)
+        pkg2id_dict = cls.get_pkg2id_dict(final_id2pkgs_dict)
+        return pkg2id_dict
 
     @classmethod
     def filter_init_dict(cls,id2pkgs_dict,all_pkgs_set):
@@ -161,3 +177,15 @@ class AlgLayer(object):
             id2pkgs_dict[i] += tmp_dict[i]
         id2pkgs_dict = cls.filter_duplicates(id2pkgs_dict)
         return id2pkgs_dict
+
+    @classmethod
+    def get_pkg2id_dict(cls,id2pkgs_dict):
+        """
+            获取pkgname为key,layer_id为value的分层字典
+        Args:
+            id2pkgs_dict (dict): id2pkg_dict
+
+        Returns:
+            res: pkg2id_dict
+        """
+        return {pkg: id for id, pkgs in id2pkgs_dict.items() for pkg in pkgs}  
