@@ -13,7 +13,9 @@
 # **********************************************************************************
 """
 import json
-
+import os
+import copy 
+from itertools import chain
 
 class AlgClassify(object): 
     """
@@ -73,4 +75,47 @@ class AlgClassify(object):
                 res.update({name:rpm_group})
             else:
                 continue
+        return res
+
+    @classmethod
+    def _get_pkg2category_by_jsonf(cls,jsonf):
+        """
+            通过json文件获取软件包类别
+        Args:
+            jsonf (str): 分类数据json文件
+
+        Returns:
+            res: 分类字典
+        """
+        res = {}
+        if os.path.exists(jsonf):
+            try:
+                res = cls._load_data(jsonf)
+            except Exception as e:
+                print('Failed to load classify data file: {} ,skip load classify data.\nERROR: {}'.format(jsonf,e))
+            return res
+        else:
+            print('File {} not exists,skip load classify data.'.format(jsonf))
+            return res
+
+    @classmethod
+    def _merge_pkg2category_dict(cls,data_obj,*args):
+        """
+            合并分类数据
+        Args:
+            data_obj: DataParse类对象
+
+        Returns:
+            res: 分类字典
+        """
+        pkgnames = list(cls._get_pkgs(data_obj))
+        res = { p:[] for p in pkgnames}
+        dict_l = [d for d in args] if args else []
+        for p in pkgnames:
+            category_l = [d.get(p,[]) for d in dict_l]
+            category = list(chain.from_iterable(category_l))
+            res[p] = copy.deepcopy(category)
+        for p,v in res.items():
+            if not v :
+                res[p] = ['其它']
         return res
