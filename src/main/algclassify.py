@@ -23,11 +23,20 @@ class AlgClassify(object):
     """
 
     @classmethod
-    def run(cls):
+    def run(cls,data_obj,json_f):
         """
             分类算法入口函数
+        Args:
+            data_obj : DataParse类对象
+            json_f (str): 分类数据json文件
+
+        Returns:
+            res: 分类字典
         """
-        pass
+        category_d1 = cls._get_pkg2category_by_jsonf(json_f)
+        category_d2 = cls._get_pkg2category_by_rpmgroup(data_obj)
+        res = cls._merge_pkg2category_dict(data_obj,category_d1,category_d2)
+        return res
 
     @staticmethod
     def _load_data(data_f):

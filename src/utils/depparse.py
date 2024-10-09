@@ -12,12 +12,10 @@
 # See the Mulan PSL v2 for more details.
 # **********************************************************************************
 """
-import os
 import copy
 from collections import defaultdict
-from fnmatch import fnmatch
-import isoparser
 import hawkey
+from util import ISOUtils
 
 class DepParse(object):
     """
@@ -122,66 +120,3 @@ class ISODepParse(DepParse):
                         deps_by_dict[tmp_k] = tmp_v
         return deps_by_dict
     
-
-class ISOUtils(object):
-    """
-        ISO处理工具类
-    """
-    
-    @staticmethod
-    def parse_iso_repodata(iso_path,repodata_dir='/opt/kyclassifier/iso_parse/repodata'):
-        """
-            解析ISO中repodata目录
-        Args:
-            iso_path (string): iso文件
-            repodata_dir (string, optional): repodata目录. Defaults to '/opt/kyclassifier/iso_parse/repodata'.
-        """
-        os.makedirs(repodata_dir,exist_ok=True)
-        iso = isoparser.parse(iso_path)
-        for repo in iso.record(b'repodata').children:
-            file_name = repo.name.decode('utf-8')
-            content = repo.get_stream().read()
-            with open(os.path.join(repodata_dir,file_name),'wb') as f:
-                f.write(content)
-
-    @staticmethod
-    def get_repo_from_dir(repodata_dir='/opt/kyclassifier/iso_parse/repodata'):
-        """
-            解析repodata目录中数据文件
-        Args:
-            repodata_dir (str, optional): repodata目录. Defaults to '/opt/kyclassifier/iso_parse/repodata'.
-        Returns:
-            tuple: ISO数据文件路径
-        """
-        repomd_fn = []
-        primary_fn = []
-        filelists_fn = []
-        path = repodata_dir
-        for res in os.walk(path):
-            files = res[-1]
-            for f in files:
-                if fnmatch(f,'repomd.xml'):
-                    repomd_fn.append(f)
-                elif fnmatch(f,'*primary.xml.*'):
-                    primary_fn.append(f)
-                elif fnmatch(f,'*filelists.xml.*'):
-                    filelists_fn.append(f)
-                else:
-                    continue
-        if any(len(x)!=1 for x in [repomd_fn,primary_fn,filelists_fn]):
-            raise FileExistsError
-        else:
-            return os.path.join(path,repomd_fn[0]),os.path.join(path,primary_fn[0]),os.path.join(path,filelists_fn[0])
-
-    @classmethod
-    def parase_iso_repofile(cls,iso_path,target_dir='/opt/kyclassifier/iso_parse/repodata'):
-        """
-            解析ISO数据文件
-        Args:
-            iso_path (str): ISO文件
-            target_dir (string, optional): 数据文件保存目录. Defaults to '/opt/kyclassifier/iso_parse/repodata'.
-        Returns:
-            tuple: ISO数据文件路径
-        """
-        cls.parse_iso_repodata(iso_path,target_dir)
-        return cls.get_repo_from_dir()
