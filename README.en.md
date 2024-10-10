@@ -1,7 +1,7 @@
 # kyclassifier
 
 #### Description
-Use for analyzes layers and categories inforamtion of packages in openEuler.
+Use for analyzes layers and categories information of packages in openEuler.
 
 #### Software Architecture
 Software architecture description

@@ -1,7 +1,7 @@
 # kyclassifier
 
 #### 介绍
-Use for analyzes layers and categories inforamtion of packages in openEuler.
+Use for analyzes layers and categories information of packages in openEuler.
 
 #### 软件架构
 软件架构说明
