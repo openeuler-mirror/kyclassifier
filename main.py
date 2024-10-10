@@ -13,13 +13,37 @@
 # **********************************************************************************
 """
 import sys
+import os
+import json
 import argparse
 from src.utils.isocheck import IsoCheck
+from src.utils import util
 
-class kyClassifier:
+
+LAYERDATA = '/opt/kyclassifier/src/data/layer_data.json'
+CLASSIFYDATA = '/opt/kyclassifier/src/data/classify_data.json'
+
+class kyClassifier(object):
+    
     @staticmethod
     def process_iso(iso_path):
         pass
+
+    @staticmethod
+    def save_output(pkg2layer,pkg2category):
+        JSON_OUTPATH = (
+            (pkg2layer,'pkg2layer.json'),
+            (pkg2category,'pkg2category.json'),
+        )
+        formatted_time = util.get_formatted_time()
+        dir_path = '/opt/kyclassifier/output/{}/'.format(formatted_time)
+        json_path = '{}json/'.format(dir_path)
+        os.makedirs(dir_path)
+        os.makedirs(json_path)
+        for tup in JSON_OUTPATH:
+            with open(json_path + tup[1],'w') as f:
+                json.dump(tup[0],f)
+        print(("Output json file saved at {}").format(json_path))    
 
 
 if __name__ == '__main__':
