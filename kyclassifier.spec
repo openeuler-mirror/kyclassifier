@@ -1,7 +1,7 @@
 Name:           kyclassifier
 Version:        1.0
 Release:        0
-Summary:        Use for analyzes layers and categories inforamtion of packages in openEuler.
+Summary:        Use for analyzes layers and categories information of packages in openEuler.
 License:        Mulan PSL v2
 Source0:        kyclassifier-%{version}.tar.gz
 BuildArch:      noarch
@@ -10,7 +10,7 @@ BuildRequires:  python3
 Requires: python3
 
 %description
-Use for analyzes layers and categories inforamtion of packages in openEuler.
+Use for analyzes layers and categories information of packages in openEuler.
 
 %prep
 %setup -q
