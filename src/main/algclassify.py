@@ -81,7 +81,7 @@ class AlgClassify(object):
             name = p.get('name')
             rpm_group = p.get('rpm_group')
             if rpm_group not in invalid_labels:
-                res.update({name:rpm_group})
+                res.update({name:[rpm_group]})
             else:
                 continue
         return res
