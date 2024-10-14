@@ -14,20 +14,32 @@
 """
 import sys
 import os
+import shutil
 import json
 import argparse
 from src.utils.isocheck import IsoCheck
+from src.utils import dataparse
+from src.utils import depparse
 from src.utils import util
-
+from src.utils.util import ISOUtils
+from src.main.alglayer import AlgLayer
+from src.main.algclassify import AlgClassify
 
 LAYERDATA = '/opt/kyclassifier/src/data/layer_data.json'
 CLASSIFYDATA = '/opt/kyclassifier/src/data/classify_data.json'
 
 class kyClassifier(object):
-    
-    @staticmethod
-    def process_iso(iso_path):
-        pass
+
+    @classmethod
+    def process_iso(cls,iso_path,tmpdir='/opt/kyclassifier/iso_parse/repodata'):
+        if os.path.exists(tmpdir):
+            shutil.rmtree(tmpdir)
+        files_path = ISOUtils.parase_iso_repofile(iso_path)
+        depobj = depparse.ISODepParse(files_path)
+        dataobj = dataparse.ISODataParse(files_path)
+        layer_res = AlgLayer.run(depobj,LAYERDATA)
+        classify_res =AlgClassify.run(dataobj,CLASSIFYDATA)
+        cls.save_output(layer_res,classify_res)
 
     @staticmethod
     def save_output(pkg2layer,pkg2category):

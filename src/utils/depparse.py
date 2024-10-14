@@ -15,7 +15,6 @@
 import copy
 from collections import defaultdict
 import hawkey
-from util import ISOUtils
 
 class DepParse(object):
     """
@@ -53,10 +52,9 @@ class ISODepParse(DepParse):
     """
         ISO软件包依赖解析模块
     """
-    def __init__(self,iso_path):
+    def __init__(self,files_path):
         super(ISODepParse,self).__init__()
-        self._iso_path = iso_path
-        # deps_dict   {pkg1:[pkg2,pkg3,...,pkgi]}
+        self._files_path = files_path
         self.dep_dict = self._get_repo_pkg_deps()
         self.dep_by_dict = self._get_repo_pkg_deps_by()
         self.all_pkgs = self._get_all_pkgs()
@@ -82,7 +80,7 @@ class ISODepParse(DepParse):
         package_dep_d = defaultdict(list)
         sack = hawkey.Sack()
         repo = hawkey.Repo("repo_parse")
-        repo.repomd_fn,repo.primary_fn,repo.filelists_fn = ISOUtils.parase_iso_repofile(self._iso_path)
+        repo.repomd_fn,repo.primary_fn,repo.filelists_fn = self._files_path
         sack.load_repo(repo,load_filelists=True)
         q = hawkey.Query(sack)
         for p in q:
