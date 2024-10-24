@@ -13,6 +13,7 @@
 # **********************************************************************************
 """
 import copy
+import json
 from collections import defaultdict
 import hawkey
 
@@ -118,3 +119,32 @@ class ISODepParse(DepParse):
                         deps_by_dict[tmp_k] = tmp_v
         return deps_by_dict
     
+
+class RepoDepParse(DepParse):
+    """
+        仓库软件包依赖解析模块 
+    """
+    def __init__(self):
+        pass
+
+    def _load_data(self):
+        """
+            加载仓库配置数据
+        Returns:
+            res (list): 仓库配置数据
+        """
+        with open('/opt/kyclassifier/src/data/repos_data.json','r') as f:
+            res = json.load(f)
+        return res
+
+    def _get_all_pkgs(self):
+        """
+            解析仓库中所有软件包名集合
+        Returns:
+            res_set (set): 仓库中所有软件包名集合
+        """
+        if isinstance(self.dep_dict,dict):
+            res_set = set(self.dep_dict.keys())
+        else:
+            res_set = set()
+        return res_set
