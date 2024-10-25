@@ -14,6 +14,7 @@
 """
 import os
 import datetime
+import platform
 from fnmatch import fnmatch
 import isoparser
 
@@ -37,6 +38,25 @@ def trans_set2list(key2set_dict):
         res: 输出转换类型后字典
     """
     return { k:list(v) for k,v in key2set_dict.items()}
+
+def get_localos_data():
+    """
+        获取部署系统信息数据
+    Returns:
+        os_data (dict): 部署系统信息数据
+    """
+    with open('/etc/system-release','r') as f:
+        os_info = f.read().strip()
+    kernel_info = platform.release()
+    if not isinstance(os_info,str):
+        os_info = 'linux'
+    if not isinstance(kernel_info,str):
+        kernel_info = 'unknown'
+    os_data = {
+    "os_info": os_info,
+    "kernel_info":kernel_info
+    }
+    return os_data
 
 class ISOUtils(object):
     """

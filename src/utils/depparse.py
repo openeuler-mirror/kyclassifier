@@ -126,7 +126,9 @@ class RepoDepParse(DepParse):
         仓库软件包依赖解析模块 
     """
     def __init__(self):
-        pass
+        self.dep_dict = self._get_repo_pkg_deps()
+        self.dep_by_dict = self._get_repo_pkg_deps_by()
+        self.all_pkgs = self._get_all_pkgs()
 
     def _load_data(self):
         """
