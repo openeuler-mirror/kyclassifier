@@ -16,6 +16,7 @@ import copy
 import json
 from collections import defaultdict
 import hawkey
+import dnf
 
 class DepParse(object):
     """
@@ -148,3 +149,55 @@ class RepoDepParse(DepParse):
         else:
             res_set = set()
         return res_set
+
+    def _get_repo_pkg_deps(self):
+        """
+            获取repo仓库中所有软件包南向依赖
+        Returns:
+            package_dep_d: 软件包南向依赖字典
+        """
+        repos = self._load_data()
+        package_dep_d = defaultdict(list)
+        with dnf.Base() as base:
+            conf = base.conf
+            for r in repos:
+                base.repos.add_new_repo(
+                    r.get('repo_id'),
+                    conf,
+                    baseurl = [r.get('baseurl')],
+                    sslverify=0,
+                )
+            base.fill_sack(load_system_repo=False)
+            print("Enabled repositories:")
+            for repo in base.repos.iter_enabled():
+                print("id: {}".format(repo.id))
+                print("baseurl: {}".format(repo.baseurl))
+            q = base.sack.query()
+        for p in q.available():
+            package_dep_d[p.name] = list(set(map(lambda x : '{}'.format(x.name),q.filter(provides=p.requires))))
+        return package_dep_d
+
+    def _get_repo_pkg_deps_by(self):
+        """
+            获取repo仓库中所有软件包北向依赖
+        Returns:
+            dict: 软件包北向依赖字典
+        """
+        deps_by_dict = defaultdict(list)
+        dep_pkgs_dict = copy.deepcopy(self.dep_dict)
+        for p in dep_pkgs_dict.keys():
+            deps_by_dict[p]
+        for k,v in dep_pkgs_dict.items():
+            if not v:
+                continue
+            else:
+                for dep_pkg in v:
+                    tmp_k = dep_pkg
+                    if tmp_k not in list(deps_by_dict.keys()):
+                        deps_by_dict[tmp_k] = [k]
+                    else:
+                        tmp_v = deps_by_dict.get(tmp_k)
+                        tmp_v.append(k)
+                        tmp_v = list(set(tmp_v))
+                        deps_by_dict[tmp_k] = tmp_v
+        return deps_by_dict 
