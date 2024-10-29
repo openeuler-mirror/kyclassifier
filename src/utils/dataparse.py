@@ -13,7 +13,9 @@
 # **********************************************************************************
 """
 import copy
+import json
 import hawkey
+import dnf
 
 RPMINFO = {
     'name' : '',
@@ -141,4 +143,50 @@ class ISODataParse(DataParse):
                 res[v] = [d]
             else:
                 res[v].append(d)
+        return res
+
+class RepoDataParse(DataParse):
+    """
+        仓库数据解析模块
+    """
+    def __init__(self):
+        pass
+    
+    @classmethod
+    def _load_data(cls):
+        """
+            加载仓库配置数据
+        Returns:
+            res: 仓库配置数据
+        """
+        repodata = '/opt/kyclassifier/src/data/repos_data.json'
+        with open(repodata,'r') as f:
+            res = json.load(f)
+        return res
+
+    @classmethod
+    def get_pkgname_set(cls):
+        """
+            获取pkgname集合
+        Returns:
+            pkgname_set (set): repo中pkgname集合
+        """
+        res = set()
+        repos = cls._load_data()
+        with dnf.Base() as base:
+            conf = base.conf
+            for r in repos:
+                base.repos.add_new_repo(
+                    r.get('repo_id'),
+                    conf,
+                    baseurl = [r.get('baseurl')],
+                    sslverify=0,
+                )
+            base.fill_sack(load_system_repo=False)
+            pkg_a = base.sack.query().available()
+            for p in pkg_a:
+                if p.name:
+                    res.add(p.name)
+                else:
+                    continue
         return res
