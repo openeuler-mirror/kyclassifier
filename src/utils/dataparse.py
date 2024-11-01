@@ -190,3 +190,50 @@ class RepoDataParse(DataParse):
                 else:
                     continue
         return res
+
+    @classmethod
+    def get_pkgsinfo_list(cls):
+        """
+            获取pkginfo列表
+        Returns:
+            res : repo中pkginfo列表
+        """
+        res = []
+        repos = cls._load_data()
+        with dnf.Base() as base:
+            conf = base.conf
+            for r in repos:
+                base.repos.add_new_repo(
+                    r.get('repo_id'),
+                    conf,
+                    baseurl = [r.get('baseurl')],
+                    sslverify=0,
+                )
+            base.fill_sack(load_system_repo=False)
+            pkg_a = base.sack.query().available()
+            for p in pkg_a:
+                pkginfo = copy.copy(RPMINFO)
+                pkginfo['name'] = p.name
+                pkginfo['arch'] = p.arch
+                pkginfo['version'] = p.version
+                pkginfo['epoch'] = str(p.epoch)
+                pkginfo['release'] = p.release
+                pkginfo['summary'] = p.summary
+                pkginfo['description'] = p.description
+                pkginfo['url'] = p.url
+                pkginfo['rpm_license'] = p.license
+                pkginfo['rpm_vendor'] = p.vendor
+                pkginfo['rpm_group'] = p.group
+                pkginfo['rpm_sourcerpm'] = p.sourcerpm
+                res.append(pkginfo)
+        return res
+
+    def get_pkginfo_byname(self,pkgname):
+        """
+            通过pkgname获取pkginfos
+        Args:
+            pkgname (str)
+        Returns:
+            pkginfos (list) [info1,info2]
+        """
+        return self.pkgname_pkginfo_dict.get(pkgname)
