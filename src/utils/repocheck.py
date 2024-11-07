@@ -14,6 +14,7 @@
 """
 import os
 import json
+import shutil
 
 class RepoCheck(object):
     """
@@ -50,6 +51,60 @@ class RepoCheck(object):
                 return repos
         except:
             return []
+
+    @staticmethod
+    def _create_repofile(repos_l):
+        """
+            创建.repo文件
+        Args:
+            repos_l (list): 仓库数据
+        Returns:
+            bool
+        """
+        if not repos_l:
+            return False
+        try:
+            with open('/etc/yum.repos.d/check_tmp.repo','w') as f:
+                repo_str = ''
+                for r in repos_l:
+                    tmp = '[{}]\nname = kyclassifier-{}\nbaseurl = {}\ngpgcheck = 0\nsslverify = 0\nenabled = 1\n'.format(r['repo_id'],r['repo_id'],r['baseurl'])
+                    repo_str += tmp
+                f.write(repo_str)
+            return True
+        except:
+            return False
+
+    @staticmethod
+    def move_repofiles(src,dst):
+        """
+            移动src目录中的.repo 文件到dst目录
+        Args:
+            src (str)
+            dst (str)
+        """
+        repo_files = [f for f in os.listdir(src) if f.endswith('.repo')]
+        for repo_file in repo_files:
+            src_path = os.path.join(src, repo_file)
+            dst_path = os.path.join(dst, repo_file)
+            try:
+                shutil.move(src_path, dst_path)
+            except IOError as e:
+                print("Error moving '{}': {}".format(repo_file, e))
+
+    @staticmethod
+    def remove_repofiles(src):
+        """
+            删除src目录中的repo文件
+        Args:
+            src (str)
+        """
+        repo_files = [f for f in os.listdir(src) if f.endswith('.repo')]
+        for repo_file in repo_files:
+            file_path = os.path.join(src, repo_file)
+            try:
+                os.remove(file_path)
+            except OSError as e:
+                print("Error removing '{}': {}".format(file_path, e))
 
     def check_repo_useful(self):
         pass
