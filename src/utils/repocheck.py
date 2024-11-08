@@ -15,6 +15,7 @@
 import os
 import json
 import shutil
+import subprocess
 
 class RepoCheck(object):
     """
@@ -106,13 +107,46 @@ class RepoCheck(object):
             except OSError as e:
                 print("Error removing '{}': {}".format(file_path, e))
 
-    def check_repo_useful(self):
-        pass
+    @classmethod
+    def check_repo_useful(cls):
+        """
+            检查配置的仓库是否可用
+        Returns:
+            res (bool)
+        """
+        repo_dir = '/etc/yum.repos.d'
+        backup_dir = '/etc/yum.repos.d/check_bak'
+        if not os.path.exists(backup_dir):
+            os.makedirs(backup_dir)
+        cls.move_repofiles(repo_dir,backup_dir)
+        repos_l = cls._load_data()
+        if not cls._create_repofile(repos_l):
+            return False
+        try:
+            cmd = 'dnf clean all $1>/dev/null 2>&1 && dnf makecache  --setopt=retries=1 $1>/dev/null 2>&1'
+            res = subprocess.call(cmd, shell=True)
+        except:
+            return False
+        finally:
+            cls.remove_repofiles(repo_dir)
+            cls.move_repofiles(backup_dir,repo_dir)
+            shutil.rmtree(backup_dir)
+        if res == 0:
+            return True
+        else:
+            return False
 
     @classmethod
     def check(cls):
         """
             仓库检查入口函数
         """
-        pass
+        if not cls.check_exist():
+            print(cls.ERROR_INFO.get(1001,''))
+            return False
+        elif not cls.check_repo_useful():
+            print(cls.ERROR_INFO.get(1002,''))
+            return False
+        else:
+            return True
 
