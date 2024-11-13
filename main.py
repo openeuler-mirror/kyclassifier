@@ -70,7 +70,8 @@ class kyClassifier(object):
 
 if __name__ == '__main__':
     options = ['-h\n',
-               '                   -iso ISO_FILE_PATH\n']
+               '                   -iso  ISO_FILE_PATH\n',
+               '                   -repo']
 
     str_usage = 'kyclassifier ' + ' '.join(options)
     parser = argparse.ArgumentParser(usage=str_usage)
