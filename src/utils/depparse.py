@@ -202,4 +202,37 @@ class RepoDepParse(DepParse):
                         tmp_v.append(k)
                         tmp_v = list(set(tmp_v))
                         deps_by_dict[tmp_k] = tmp_v
-        return deps_by_dict 
+        return deps_by_dict
+
+class LocalInstalledDepParse(DepParse):
+    """
+        已安装软件包依赖解析模块 
+    """
+    def __init__(self):
+        pass
+
+    def _get_all_pkgs(self):
+        pass
+
+    def _get_installed_pkgdeps(self):
+        """
+            获取已安装软件包的南向依赖
+        Returns:
+            package_dep_d: 软件包南向依赖字典
+        """
+        package_dep_d = defaultdict(list)
+        sack = hawkey.Sack()
+        sack.load_system_repo(build_cache=False)
+        q = hawkey.Query(sack)
+        for p in q:
+            p_name = p.name
+            req_l = []
+            req_objs = q.filter(provides=p.requires)
+            for req_obj in req_objs:
+                req_pkgname = req_obj.name
+                req_l.append(req_pkgname)
+            package_dep_d[p_name] = req_l
+        return package_dep_d
+    
+    def _get_installed_pkgdeps_by(self):
+        pass
