@@ -43,7 +43,7 @@ class ReportGenerator(object):
             except Exception as err:
                 print("The input path not exist, generate report failed!")
 
-    def _format_report_data(slef):
+    def _format_report_data(self):
         pass
 
     def _format_chart_data(self, pie_data,category_data):

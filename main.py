@@ -36,7 +36,7 @@ class kyClassifier(object):
     def process_iso(cls,iso_path,tmpdir='/opt/kyclassifier/iso_parse/repodata'):
         if os.path.exists(tmpdir):
             shutil.rmtree(tmpdir)
-        files_path = ISOUtils.parase_iso_repofile(iso_path)
+        files_path = ISOUtils.parse_iso_repofile(iso_path)
         depobj = depparse.ISODepParse(files_path)
         dataobj = dataparse.ISODataParse(files_path)
         layer_res = AlgLayer.run(depobj,LAYERDATA)
