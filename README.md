@@ -1,23 +1,31 @@
 # kyclassifier
 
 #### 介绍
-Use for analyzes layers and categories information of packages in openEuler.
+用于分析openEuler中包的图层和类别信息。
 
 #### 软件架构
-软件架构说明
+支持x86_64架构系统
 
 
 #### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+1.  安装依赖模块pycdlib hawkey 和isoparser
+安装命令：
+pip3 install pycdlib isoparser
+yum install python3-hawkey
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+python3 main.py -h
+usage: kyclassifier -h
+                    -iso  ISO_FILE_PATH
+                    -repo
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -iso ISO    Input ISO file path
+  -repo       Whether to analyze repo packages.
+  
 
 #### 参与贡献
 
