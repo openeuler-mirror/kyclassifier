@@ -209,10 +209,21 @@ class LocalInstalledDepParse(DepParse):
         已安装软件包依赖解析模块 
     """
     def __init__(self):
-        pass
+        self.dep_dict = self._get_installed_pkgdeps()
+        self.dep_by_dict = self._get_installed_pkgdeps_by()
+        self.all_pkgs = self._get_all_pkgs()
 
     def _get_all_pkgs(self):
-        pass
+        """
+            解析已安装软件包名集合
+        Returns:
+            res_set (set): 本地已安装所有软件包名集合
+        """
+        if isinstance(self.dep_dict,dict):
+            res_set = set(self.dep_dict.keys())
+        else:
+            res_set = set()
+        return res_set
 
     def _get_installed_pkgdeps(self):
         """
@@ -235,4 +246,26 @@ class LocalInstalledDepParse(DepParse):
         return package_dep_d
     
     def _get_installed_pkgdeps_by(self):
-        pass
+        """
+            获取已安装软件包的北向依赖
+        Returns:
+            dict: 软件包北向依赖字典
+        """
+        deps_by_dict = defaultdict(list)
+        dep_pkgs_dict = copy.deepcopy(self.dep_dict)
+        for p in dep_pkgs_dict.keys():
+            deps_by_dict[p]
+        for k,v in dep_pkgs_dict.items():
+            if not v:
+                continue
+            else:
+                for dep_pkg in v:
+                    tmp_k = dep_pkg
+                    if tmp_k not in list(deps_by_dict.keys()):
+                        deps_by_dict[tmp_k] = [k]
+                    else:
+                        tmp_v = deps_by_dict.get(tmp_k)
+                        tmp_v.append(k)
+                        tmp_v = list(set(tmp_v))
+                        deps_by_dict[tmp_k] = tmp_v
+        return deps_by_dict 
