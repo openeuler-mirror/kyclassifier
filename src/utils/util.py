@@ -109,7 +109,7 @@ class ISOUtils(object):
             return os.path.join(path,repomd_fn[0]),os.path.join(path,primary_fn[0]),os.path.join(path,filelists_fn[0])
 
     @classmethod
-    def parase_iso_repofile(cls,iso_path,target_dir='/opt/kyclassifier/iso_parse/repodata'):
+    def parse_iso_repofile(cls,iso_path,target_dir='/opt/kyclassifier/iso_parse/repodata'):
         """
             解析ISO数据文件
         Args:
