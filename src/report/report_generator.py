@@ -44,10 +44,56 @@ class ReportGenerator(object):
                 print("The input path not exist, generate report failed!")
 
     def _format_report_data(self):
-        pass
+        with open(self.category_path, 'r') as f:
+            category_data = json.load(f)
 
+        with open(self.id_path, 'r') as f:
+            id_data = json.load(f)
+
+        with open(self.base_path, 'r') as f:
+            base_data = json.load(f)
+
+        out_pie_data = {1:0, 2:0, 3:0, 4:0}
+        out_category_data = {}
+        out_id_data = []
+        for name, id in id_data.items():
+            out_pie_data[id] += 1
+            category_list = category_data.get(name,[])
+
+            for category_item in category_list:
+                if out_category_data.get(category_item):
+                    out_category_data[category_item]["count"] += 1
+                    out_category_data[category_item]["pkgs"].append(name)
+                else:
+                    out_category_data[category_item] = { "count": 1, "pkgs": [name] }
+
+            out_id_data.append({
+                "name": name,
+                "id": id,
+                "category": category_list
+            })
+
+        return out_pie_data, out_category_data, out_id_data, base_data
+    
     def _format_chart_data(self, pie_data,category_data):
-        pass
+        format_pie_data = []
+        format_category_data = []
+        format_sum_data = 0
+        for name, value in pie_data.items():
+            format_sum_data = format_sum_data + value
+            format_pie_data.append({
+                "name":name,
+                "value":value
+            })
+        for name,value in category_data.items():
+            boxID = str.replace(str(name), '/', '-')
+            boxID = str.replace(boxID, ' ', '-')
+            format_category_data.append({
+                "desc":name+" 分类软件包数量: "+str(value["count"]),
+                "boxID":boxID,
+                "pkgs":value["pkgs"]
+            })
+        return format_pie_data,format_category_data, format_sum_data
     
     def _generate_html_file(self):
         start_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
