@@ -277,7 +277,7 @@ class LocalInstalledDataParse(DataParse):
         """
             获取pkgname集合
         Returns:
-            pkgname_set (set): repo中pkgname集合
+            pkgname_set (set): 本地已安装pkgname集合
         """
         res = set()
         sack = hawkey.Sack()
