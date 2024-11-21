@@ -259,3 +259,36 @@ class RepoDataParse(DataParse):
             else:
                 res[v].append(d)
         return res
+    
+
+class LocalInstalledDataParse(DataParse):
+    """
+        已安装软件包数据解析模块
+    """
+
+    def __init__(self):
+        pass
+
+    @classmethod
+    def get_pkgname_set(cls):
+        """
+            获取pkgname集合
+        Returns:
+            pkgname_set (set): pkgname集合
+        """
+        res = set()
+        sack = hawkey.Sack()
+        sack.load_system_repo(build_cache=False)
+        q = hawkey.Query(sack)
+        for p in q:
+            if p.name:
+                res.add(p.name)
+            else:
+                continue
+        return res
+
+    def get_pkgsinfo_list(self):
+        pass
+
+    def get_pkginfo_byname(self):
+        pass
