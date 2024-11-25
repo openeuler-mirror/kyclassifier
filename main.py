@@ -50,6 +50,14 @@ class kyClassifier(object):
         layer_res = AlgLayer.run(depobj,LAYERDATA)
         classify_res =AlgClassify.run(dataobj,CLASSIFYDATA)
         cls.save_output(layer_res,classify_res)
+    
+    @classmethod
+    def process_local(cls):
+        depobj = depparse.LocalInstalledDepParse()
+        dataobj = dataparse.LocalInstalledDataParse()
+        layer_res = AlgLayer.run(depobj,LAYERDATA)
+        classify_res =AlgClassify.run(dataobj,CLASSIFYDATA)
+        cls.save_output(layer_res,classify_res)
 
     @staticmethod
     def save_output(pkg2layer,pkg2category):
@@ -71,12 +79,14 @@ class kyClassifier(object):
 if __name__ == '__main__':
     options = ['-h\n',
                '                   -iso  ISO_FILE_PATH\n',
-               '                   -repo']
+               '                   -repo\n',
+               '                   -local']
 
     str_usage = 'kyclassifier ' + ' '.join(options)
     parser = argparse.ArgumentParser(usage=str_usage)
     parser.add_argument('-iso', type=str, help='Input ISO file path')
     parser.add_argument('-repo', action = 'store_true', help='Whether to analyze repo packages.')
+    parser.add_argument('-local', action = 'store_true', help='Whether to analyze local installed packages.')
     args = parser.parse_args()
     if args.iso:
         if not IsoCheck.check(args.iso):
@@ -86,5 +96,6 @@ if __name__ == '__main__':
         if not RepoCheck.check():
             sys.exit(1)
         kyClassifier.process_repo()   
-
+    if args.local:
+        kyClassifier.process_local()  
 
