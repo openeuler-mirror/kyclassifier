@@ -100,7 +100,7 @@ class AlgClassify(object):
         if os.path.exists(jsonf):
             try:
                 res = cls._load_data(jsonf)
-            except Exception as e:
+            except (IOError, json.JSONDecodeError) as e:
                 print('Failed to load classify data file: {} ,skip load classify data.\nERROR: {}'.format(jsonf,e))
             return res
         else:
