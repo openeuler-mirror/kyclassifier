@@ -19,6 +19,9 @@ import time
 import sys
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+from src.utils.exceptions import ReportGenerateError
+
+
 class ReportGenerator(object):
     """
     A generator to convert raw data to json file and html file
@@ -35,13 +38,10 @@ class ReportGenerator(object):
     def _check_param_valid(self):
         for path in [self.category_path, self.id_path, self.base_path]:
             if not os.path.exists(path):
-                raise Exception("The input data path not exist")
+                raise FileNotFoundError("The input data path not exist")
 
         if not os.path.exists(self.result_path):
-            try:
-                os.makedirs(self.result_path)
-            except Exception as err:
-                print("The input path not exist, generate report failed!")
+            os.makedirs(self.result_path, exist_ok=True)
 
     def _format_report_data(self):
         with open(self.category_path, 'r') as f:
@@ -114,7 +114,7 @@ class ReportGenerator(object):
             with io.open(html_path,'w',encoding='utf-8') as hf:
                 hf.write(report_template) 
         except (SyntaxError, OSError) as err:
-            raise Exception(err)
+            raise ReportGenerateError(err)
 
     def generate_result_file(self):
         self._check_param_valid()

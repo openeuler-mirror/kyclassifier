@@ -188,4 +188,4 @@ class AlgLayer(object):
         Returns:
             res: pkg2id_dict
         """
-        return {pkg: id for id, pkgs in id2pkgs_dict.items() for pkg in pkgs}  
+        return {pkg: _id for _id, pkgs in id2pkgs_dict.items() for pkg in pkgs}
