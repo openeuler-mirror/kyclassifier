@@ -13,19 +13,19 @@
 # **********************************************************************************
 """
 import os
-import datetime
+import time
 import platform
 from fnmatch import fnmatch
 import isoparser
 
-def get_formatted_time():
+
+def get_formatted_time(fmt="%Y-%m-%d-%H-%M-%S"):
     """
         获取当前时间格式化输出
     Returns:
         formatted_time (str) : 格式化输出当前时间
     """
-    current_datetime = datetime.datetime.now()
-    formatted_time = current_datetime.strftime('%Y-%m-%d-%H-%M-%S')
+    formatted_time = time.strftime(fmt)
     return formatted_time
 
 def trans_set2list(key2set_dict):
@@ -92,21 +92,25 @@ class ISOUtils(object):
         primary_fn = []
         filelists_fn = []
         path = repodata_dir
-        for res in os.walk(path):
-            files = res[-1]
+
+        for root, _, files in os.walk(path):
             for f in files:
                 if fnmatch(f,'repomd.xml'):
-                    repomd_fn.append(f)
+                    repomd_path = os.path.join(root, f)
+                    repomd_fn.append(repomd_path)
                 elif fnmatch(f,'*primary.xml.*'):
-                    primary_fn.append(f)
+                    primary_path = os.path.join(root, f)
+                    primary_fn.append(primary_path)
                 elif fnmatch(f,'*filelists.xml.*'):
-                    filelists_fn.append(f)
+                    filelists_path = os.path.join(root, f)
+                    filelists_fn.append(filelists_path)
                 else:
                     continue
+
         if any(len(x)!=1 for x in [repomd_fn,primary_fn,filelists_fn]):
             raise FileExistsError
         else:
-            return os.path.join(path,repomd_fn[0]),os.path.join(path,primary_fn[0]),os.path.join(path,filelists_fn[0])
+            return repomd_fn[0], primary_fn[0], filelists_fn[0]
 
     @classmethod
     def parase_iso_repofile(cls,iso_path,target_dir='/opt/kyclassifier/iso_parse/repodata'):

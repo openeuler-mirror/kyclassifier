@@ -15,11 +15,11 @@
 import io
 import os
 import json
-import time
 import sys
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from src.utils.exceptions import ReportGenerateError
+from src.utils.util import get_formatted_time
 
 
 class ReportGenerator(object):
@@ -50,7 +50,7 @@ class ReportGenerator(object):
         pass
     
     def _generate_html_file(self):
-        start_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
+        start_time = get_formatted_time(fmt="%Y-%m-%d %H:%M:%S")
         pie_data, category_data, id_data, base_data = self._format_report_data()
         pie_data, category_data,sum_data = self._format_chart_data(pie_data,category_data)
         env = Environment(loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), 'template')),autoescape=select_autoescape(["html", "xml"]),enable_async=False)
