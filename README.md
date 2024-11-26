@@ -9,22 +9,33 @@
 
 #### 安装教程
 
-1.  安装依赖模块pycdlib hawkey 和isoparser
-安装命令：
+工具安装：
+git clone https://gitee.com/openeuler/kyclassifier
+mv kyclassifier kyclassifier-1.1
+tar -czvf kyclassifier-1.1.tar.gz kyclassifier-1.1
+mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+mv kyclassifier-1.1.tar.gz ~/rpmbuild/SOURCES
+cp kyclassifier-1.1/kyclassifier.spec ~/rpmbuild/SPECS
+rpmbuild -ba ~/rpmbuild/SPECS/kyclassifier.spec
+rpm -ivh ~/rpmbuild/RPMS/xxxx/kyclassifier-1.1-0.xxxx.rpm
+
+依赖安装：
 pip3 install pycdlib isoparser
 yum install python3-hawkey
 
 #### 使用说明
 
-python3 main.py -h
+kyclassifier -h 
 usage: kyclassifier -h
                     -iso  ISO_FILE_PATH
                     -repo
+                    -local
 
 optional arguments:
   -h, --help  show this help message and exit
   -iso ISO    Input ISO file path
   -repo       Whether to analyze repo packages.
+  -local      Whether to analyze local installed packages.
   
 
 #### 参与贡献

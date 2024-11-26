@@ -4,19 +4,38 @@
 Use for analyzes layers and categories information of packages in openEuler.
 
 #### Software Architecture
-Software architecture description
+Supports x86_64 and aarch64 architecture systems
 
 #### Installation
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+Tool Installation:
+git clone https://gitee.com/openeuler/kyclassifier
+mv kyclassifier kyclassifier-1.1
+tar -czvf kyclassifier-1.1.tar.gz kyclassifier-1.1
+mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+mv kyclassifier-1.1.tar.gz ~/rpmbuild/SOURCES
+cp kyclassifier-1.1/kyclassifier.spec ~/rpmbuild/SPECS
+rpmbuild -ba ~/rpmbuild/SPECS/kyclassifier.spec
+rpm -ivh ~/rpmbuild/RPMS/xxxx/kyclassifier-1.1-0.xxxx.rpm
+
+Install dependent packages:
+pip3 install pycdlib isoparser
+yum install python3-hawkey
 
 #### Instructions
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+kyclassifier -h 
+usage: kyclassifier -h
+                    -iso  ISO_FILE_PATH
+                    -repo
+                    -local
+
+optional arguments:
+  -h, --help  show this help message and exit
+  -iso ISO    Input ISO file path
+  -repo       Whether to analyze repo packages.
+  -local      Whether to analyze local installed packages.
+
 
 #### Contribution
 
