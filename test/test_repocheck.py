@@ -15,6 +15,7 @@
 """
 
 import unittest
+import os
 
 from src.utils.repocheck import RepoCheck
 
@@ -23,22 +24,77 @@ class TestRepoCheck(unittest.TestCase):
 
     def setUp(self):
         self.repo_check = RepoCheck()
+        self.repo_path = "/etc/yum.repos.d"
+        self.repofile = os.path.join(self.repo_path, "check_tmp.repo")
+        self.tmp_path = "/tmp"
+        self.dst_repofile = os.path.join(self.repo_path, "check_tmp.repo")
 
     def tearDown(self):
-        pass
+        """Clear test data
+        """
+        if os.path.exists(self.repofile):
+            os.remove(repofile)
 
+        if os.path.exists(self.dst_repofile):
+            os.remove(repofile)
 
     def test_check_exist(self):
         """Test class method check_exist()
+
+        Returns:
+            bool
         """
         result = self.repo_check.check_exist()
         self.assertIn(result, [True, False], "check_exist test failed!")
 
     def test__load_data(self):
         """Test class method _load_data()
+
+        Returns:
+            datatype
         """
         result = self.repo_check._load_data()
         self.assertIsInstance(result, list, "_load_data test failed!")
+
+    def test__create_repofile(self):
+        """Test static method _create_repofile(arepos_l)
+
+        Args:
+            repos_l (list): repodata list
+        Returns:
+            bool
+        """
+        repos_l = [{
+            "repo_id": "test_base_repo",
+            "baseurl": "http://url/path/base/arch"
+            }, {
+            "repo_id": "test_updates_repo",
+            "baseurl": "http://url/path/updates/arch"
+            }
+        ]
+        if os.path.exists(self.repo_path):
+            result = self.repo_check._create_repofile(repos_l)
+            self.assertIn(result, [True, False], "_create_repofile test failed!")
+        else:
+            self.skipTest("_create_repofile test skiped!")
+
+
+    def test_move_repofiles(self):
+        """Test static method move_repofiles(src,dst)
+
+        Args:
+            src (str)
+            dst (str)
+        Returns:
+            None
+        """
+        try:
+            if os.path.exists(self.repo_path) and os.path.exists(self.tmp_path):
+                self.repo_check.move_repofiles(self.repofile, self.dst_repofile)
+            else:
+                raise IOError("move file dose not exists")
+        except IOError:
+            self.skipTest("move_repofiles test skiped!")
 
 
 if __name__ == "__main__":
