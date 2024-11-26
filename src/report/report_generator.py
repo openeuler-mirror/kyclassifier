@@ -26,9 +26,10 @@ class ReportGenerator(object):
     """
     A generator to convert raw data to json file and html file
     """
-    def __init__(self, category_path, id_path, result_path, file_name):
+    def __init__(self, category_path, id_path, base_path, result_path, file_name):
         self.category_path = category_path
         self.id_path = id_path
+        self.base_path = base_path
         self.result_path = result_path
         self.file_name = file_name
         self.flag = os.O_WRONLY | os.O_CREAT | os.O_TRUNC
