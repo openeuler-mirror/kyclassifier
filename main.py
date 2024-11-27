@@ -98,4 +98,5 @@ if __name__ == '__main__':
         kyClassifier.process_repo()   
     if args.local:
         kyClassifier.process_local()  
-
+    if len(sys.argv) == 1:
+        parser.print_help()
