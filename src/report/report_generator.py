@@ -44,6 +44,17 @@ class ReportGenerator(object):
         if not os.path.exists(self.result_path):
             os.makedirs(self.result_path, exist_ok=True)
 
+    def _format_name_to_boxid(self,category_list):
+        format_category = []
+        for item in category_list:
+            boxID = str.replace(str(item), '/', '-')
+            boxID = str.replace(boxID,' ', '-')
+            format_category.append({
+               "boxID":boxID,
+               "name":item 
+            })
+        return format_category
+
     def _format_report_data(self):
         with open(self.category_path, 'r') as f:
             category_data = json.load(f)
@@ -71,7 +82,7 @@ class ReportGenerator(object):
             out_id_data.append({
                 "name": name,
                 "id": id,
-                "category": category_list
+                "category": self._format_name_to_boxid(category_list)
             })
 
         return out_pie_data, out_category_data, out_id_data, base_data
