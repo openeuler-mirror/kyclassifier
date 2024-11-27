@@ -33,10 +33,10 @@ class TestRepoCheck(unittest.TestCase):
         """Clear test data
         """
         if os.path.exists(self.repofile):
-            os.remove(repofile)
+            os.remove(self.repofile)
 
         if os.path.exists(self.dst_repofile):
-            os.remove(repofile)
+            os.remove(self.repofile)
 
     def test_check_exist(self):
         """Test class method check_exist()
