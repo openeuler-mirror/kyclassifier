@@ -1,5 +1,6 @@
 #-*- coding:utf-8 -*-
 
+import os
 import logging
 from logging.handlers import RotatingFileHandler
 LOGNAME='kyclassifier'
@@ -21,7 +22,11 @@ class LOGGER():
         """
         Function to setup a logger with both file and console handlers.
         """
-        log_file = '/opt/kyclassifier/output/kyclassifier.log'
+        log_path = '/opt/kyclassifier/output'
+        if not os.path.exists(log_path):
+            os.makedirs(log_path)
+            
+        log_file = os.path.join(log_path, 'kyclassifier.log')
 
         # Create a custom logger
         logger_1 = logging.getLogger(LOGNAME)
