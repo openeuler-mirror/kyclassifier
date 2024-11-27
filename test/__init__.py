@@ -15,12 +15,14 @@
 """
 import os
 import sys
-parent_path = os.path.dirname(os.path.dirname(__file__))
+current_path = os.path.dirname(__file__)
+parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 
 import unittest
 
 from test_repocheck import TestRepoCheck
+from test_util import TestUtil
 
 
 if __name__ == "__main__":
