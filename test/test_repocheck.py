@@ -96,6 +96,27 @@ class TestRepoCheck(unittest.TestCase):
         except IOError:
             self.skipTest("move_repofiles test skiped!")
 
+    def test_check_repo_useful(self):
+        """Test class method check_repo_useful()
+
+        Returns:
+            None
+        """
+        try:
+            result = self.repo_check.check_repo_useful()
+            self.assertIn(result, [True, False], "check_repo_useful test failed!")
+        except IOError:
+            self.skipTest("check_repo_useful test skiped!")
+
+    def test_check(self):
+        """Test class method check()
+
+        Returns:
+            bool
+        """
+        result = self.repo_check.check()
+        self.assertIn(result, [True, False], "check test failed!")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
