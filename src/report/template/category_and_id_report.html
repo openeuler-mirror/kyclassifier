@@ -10819,7 +10819,15 @@
                 </template>
               </el-table-column>
 
-              <el-table-column prop="category" label="分类">
+              <el-table-column>
+                <template slot="header" slot-scope="scope">
+                  <el-input
+                    v-model="search"
+                    size="mini"
+                    @change="SearchData"
+                    placeholder="按包名进行搜索"/>
+                </template>
+
                 <template slot-scope="scope">
                   {% raw %}
                   <el-button v-for="(item, index) in scope.row.category" :key="index" @click="toIDCollapse(item.boxID)"> {{item.name}} </el-button>
