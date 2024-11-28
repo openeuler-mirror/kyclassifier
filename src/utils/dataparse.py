@@ -17,12 +17,13 @@ import json
 import hawkey
 import dnf
 
+from .config import BaseConfig
+
 
 class RpmInfo():
     """数据类
     """
     def __init__(self, obj):
-        print(dir(obj))
         self.name = obj.name
         self.arch = obj.arch
         self.version = obj.version
@@ -171,11 +172,14 @@ class RepoDataParse(DataParse):
     def _load_data(cls):
         """
             加载仓库配置数据
+
+            default path '/opt/kyclassifier/src/data/repos_data.json'
         Returns:
             res: 仓库配置数据
         """
-        repodata = '/opt/kyclassifier/src/data/repos_data.json'
-        with open(repodata,'r') as f:
+
+
+        with open(BaseConfig.REPODATA, 'r') as f:
             res = json.load(f)
         return res
 

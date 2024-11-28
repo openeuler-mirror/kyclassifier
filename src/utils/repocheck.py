@@ -17,15 +17,12 @@ import json
 import shutil
 import subprocess
 
+from .config import BaseConfig
+
 class RepoCheck(object):
     """
         输入仓库配置检查
     """
-    REPO_DATA = '/opt/kyclassifier/src/data/repos_data.json'
-    ERROR_INFO = {
-        1001:'The repository configuration file does not exist. Please check if the file /opt/kyclassifier/src/data/repos_data.json exists',
-        1002:'The currently configured repository is not available. Please check that the repository configuration in the file /opt/kyclassifier/src/data/repos_data.json is correct.',
-    }
 
     @classmethod
     def check_exist(cls):
@@ -34,7 +31,7 @@ class RepoCheck(object):
         Returns:
             bool : 返回检查结果
         """
-        if not os.path.exists(cls.REPO_DATA):
+        if not os.path.exists(BaseConfig.REPODATA):
             return False
         else:
             return True
@@ -47,7 +44,7 @@ class RepoCheck(object):
             repos (list): 仓库配置数据
         """
         try:
-            with open(cls.REPO_DATA,'r') as f:
+            with open(BaseConfig.REPODATA, 'r') as f:
                 repos = json.load(f)
                 return repos
         except:
@@ -142,10 +139,10 @@ class RepoCheck(object):
             仓库检查入口函数
         """
         if not cls.check_exist():
-            print(cls.ERROR_INFO.get(1001,''))
+            print(BaseConfig.REPO_CHECK_ERROR_INFO.get(1001,''))
             return False
         elif not cls.check_repo_useful():
-            print(cls.ERROR_INFO.get(1002,''))
+            print(BaseConfig.REPO_CHECK_ERROR_INFO.get(1002,''))
             return False
         else:
             return True

@@ -18,6 +18,9 @@ from collections import defaultdict
 import hawkey
 import dnf
 
+from .config import BaseConfig
+
+
 class DepParse(object):
     """
         依赖解析模块
@@ -136,7 +139,7 @@ class RepoDepParse(DepParse):
         Returns:
             res (list): 仓库配置数据
         """
-        with open('/opt/kyclassifier/src/data/repos_data.json','r') as f:
+        with open(BaseConfig.REPODATA, 'r') as f:
             res = json.load(f)
         return res
 

@@ -16,11 +16,8 @@ import os
 import pycdlib
 
 from .exceptions import ISOCheckError
+from .config import BaseConfig
 
-ERROR_INFO={
-    1001:"The ISO path does not exist. Please check if the entered ISO path is correct.",
-    1002:"The ISO file format is not correct. Please check if the input file is a server operating system ISO image file.",
-}
 
 class IsoCheck(object):
     """
@@ -73,10 +70,10 @@ class IsoCheck(object):
         """
         obj = cls(iso_path)
         if not obj.check_exist():
-            print(ERROR_INFO.get(1001,''))
+            print(BaseConfig.ISO_CHECK_ERROR_INFO.get(1001,''))
             return False
         elif not obj.check_format():
-            print(ERROR_INFO.get(1002,''))
+            print(BaseConfig.ISO_CHECK_ERROR_INFO.get(1002,''))
             return False
         else:
             return True

@@ -18,6 +18,7 @@ import platform
 from fnmatch import fnmatch
 import isoparser
 
+from .config import BaseConfig
 
 def get_formatted_time(fmt="%Y-%m-%d-%H-%M-%S"):
     """
@@ -64,7 +65,7 @@ class ISOUtils(object):
     """
 
     @staticmethod
-    def parse_iso_repodata(iso_path,repodata_dir='/opt/kyclassifier/iso_parse/repodata'):
+    def parse_iso_repodata(iso_path, repodata_dir=BaseConfig.ISO_REPODATA_DIR):
         """
             解析ISO中repodata目录
         Args:
@@ -80,7 +81,7 @@ class ISOUtils(object):
                 f.write(content)
 
     @staticmethod
-    def get_repo_from_dir(repodata_dir='/opt/kyclassifier/iso_parse/repodata'):
+    def get_repo_from_dir(repodata_dir=BaseConfig.ISO_REPODATA_DIR):
         """
             解析repodata目录中数据文件
         Args:
@@ -113,7 +114,11 @@ class ISOUtils(object):
             return repomd_fn[0], primary_fn[0], filelists_fn[0]
 
     @classmethod
+<<<<<<< Updated upstream
     def parse_iso_repofile(cls,iso_path,target_dir='/opt/kyclassifier/iso_parse/repodata'):
+=======
+    def parase_iso_repofile(cls,iso_path,target_dir=BaseConfig.ISO_REPODATA_DIR):
+>>>>>>> Stashed changes
         """
             解析ISO数据文件
         Args:
