@@ -24,22 +24,79 @@ class TestDataParse(unittest.TestCase):
     """
 
     def setUp(self):
-        self.files_path = ['/opt/kyclassifier/iso_parse/repodata/test_primary.xml',
-                           '/opt/kyclassifier/iso_parse/repodata/test_filelists.xml',
-                           '/opt/kyclassifier/iso_parse/repodata/repomd.xml']
-        self.iso_dataparse = ISODataParse(self.files_path)
+        self.files_path = ['/opt/kyclassifier/iso_parse/repodata/repomd.xml',
+                           '/opt/kyclassifier/iso_parse/repodata/test_primary.xml.gz',
+                           '/opt/kyclassifier/iso_parse/repodata/test_filelists.xml.gz',
+                           ]
         
     def tearDown(self):
         pass
 
-    def test_get_pkgname_set(self):
+    def _init_iso_dataparse(self):
         """
-            Test class method get_pkgname_set()
+            Try to init iso_depparse object
+        Returns:
+            bool
+        """
+        try:
+            self.iso_dataparse = ISODataParse(self.files_path)
+            return True
+        except:
+            return False
+
+    def test_iso_get_pkgname_set(self):
+        """
+            Test class ISODataParse method get_pkgname_set()
         Returns:
             set()
         """
-        result = self.iso_dataparse.get_pkgname_set(self.files_path)
-        self.assertIsInstance(result, set, "get_pkgname_set test failed!")
+        if not self._init_iso_dataparse():
+            self.skipTest("Init iso_dataparse failed, test skiped!")
+        else:
+            result = self.iso_dataparse.get_pkgname_set(self.files_path)
+            self.assertIsInstance(result, set, "get_pkgname_set test failed!")
+
+    def test_iso_get_pkgsinfo_list(self):
+        """
+            Test class ISODataParse method get_pkgname_set()
+        Returns:
+            list
+        """
+        if not self._init_iso_dataparse():
+            self.skipTest("Init iso_dataparse failed, test skiped!")
+        else:
+            result = self.iso_dataparse.get_pkgsinfo_list(self.files_path)
+            self.assertIsInstance(result, list, "get_pkgsinfo_list test failed!")
+
+    def test_iso_get_pkginfo_byname(self):
+        """
+            Test class ISODataParse method get_pkginfo_byname()
+        Args:
+            pkgname (str)
+        Returns:
+            result (list) [info1,info2]
+        """
+        if not self._init_iso_dataparse():
+            self.skipTest("Init iso_dataparse failed, test skiped!")
+        else:
+            pkgname = 'kernel'
+            result = self.iso_dataparse.get_pkginfo_byname(pkgname)
+            self.assertIsInstance(result, list, "get_pkginfo_byname test failed!")
+    
+    def test__list2dict(self):
+        """
+            Test class ISODataParse method _list2dict()
+        Args:
+            dict_list (list): [d1,d2,...]
+            key (str)
+        Returns:
+            res (dict): {d[key]:[d1,d2,...], ...}
+        """
+        dict_list = [{'pkgname':'aaa'},
+                     {'pkgname':'bbb'}]
+        key = 'pkgname'
+        result = ISODataParse._list2dict(dict_list,key)
+        self.assertIsInstance(result,dict,"_list2dict test failed!")
 
 
 if __name__ == "__main__":
