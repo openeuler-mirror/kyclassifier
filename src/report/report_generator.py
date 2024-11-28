@@ -21,7 +21,12 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 from src.utils.exceptions import ReportGenerateError
 from src.utils.util import get_formatted_time
 
-
+CATEGORY_NAME={
+    1:"基础运行环境层",
+    2:"基础服务环境层",
+    3:"基础图形环境层",
+    4:"应用运行环境层",
+}
 class ReportGenerator(object):
     """
     A generator to convert raw data to json file and html file
@@ -94,7 +99,7 @@ class ReportGenerator(object):
         for name, value in pie_data.items():
             format_sum_data = format_sum_data + value
             format_pie_data.append({
-                "name":name,
+                "name":CATEGORY_NAME[name],
                 "value":value
             })
         for name,value in category_data.items():
