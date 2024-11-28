@@ -24,11 +24,10 @@ from src.utils import dataparse
 from src.utils import depparse
 from src.utils import util
 from src.utils.util import ISOUtils
+from src.utils.config import BaseConfig
 from src.main.alglayer import AlgLayer
 from src.main.algclassify import AlgClassify
 
-LAYERDATA = '/opt/kyclassifier/src/data/layer_data.json'
-CLASSIFYDATA = '/opt/kyclassifier/src/data/classify_data.json'
 
 class kyClassifier(object):
 
@@ -39,16 +38,16 @@ class kyClassifier(object):
         files_path = ISOUtils.parse_iso_repofile(iso_path)
         depobj = depparse.ISODepParse(files_path)
         dataobj = dataparse.ISODataParse(files_path)
-        layer_res = AlgLayer.run(depobj,LAYERDATA)
-        classify_res =AlgClassify.run(dataobj,CLASSIFYDATA)
+        layer_res = AlgLayer.run(depobj, BaseConfig.LAYERDATA)
+        classify_res =AlgClassify.run(dataobj, BaseConfig.CLASSIFYDATA)
         cls.save_output(layer_res,classify_res)
 
     @classmethod
     def process_repo(cls):
         depobj = depparse.RepoDepParse()
         dataobj = dataparse.RepoDataParse()
-        layer_res = AlgLayer.run(depobj,LAYERDATA)
-        classify_res =AlgClassify.run(dataobj,CLASSIFYDATA)
+        layer_res = AlgLayer.run(depobj, BaseConfig.LAYERDATA)
+        classify_res =AlgClassify.run(dataobj, BaseConfig.CLASSIFYDATA)
         cls.save_output(layer_res,classify_res)
     
     @classmethod
