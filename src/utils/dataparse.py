@@ -39,9 +39,17 @@ class DataParse(object):
     def __init__(self):
         self.pkgs_name = set()
         self.pkgs_info = []
+        self.pkgname_pkginfo_dict = {}
         
-    def get_pkginfo_byname(self):
-        pass
+    def get_pkginfo_byname(self, pkgname):
+        """
+            通过pkgname获取pkginfos
+        Args:
+            pkgname (str)
+        Returns:
+            pkginfos (list) [info1,info2]
+        """
+        return self.pkgname_pkginfo_dict.get(pkgname)
 
 class ISODataParse(DataParse):
     """
@@ -115,16 +123,6 @@ class ISODataParse(DataParse):
             pkginfo['rpm_sourcerpm'] = p.sourcerpm
             res.append(pkginfo)
         return res
-
-    def get_pkginfo_byname(self,pkgname):
-        """
-            通过pkgname获取pkginfos
-        Args:
-            pkgname (str)
-        Returns:
-            pkginfos (list) [info1,info2]
-        """
-        return self.pkgname_pkginfo_dict.get(pkgname)
 
     @classmethod
     def _list2dict(cls, dict_list, key):
@@ -231,16 +229,6 @@ class RepoDataParse(DataParse):
                 res.append(pkginfo)
         return res
 
-    def get_pkginfo_byname(self,pkgname):
-        """
-            通过pkgname获取pkginfos
-        Args:
-            pkgname (str)
-        Returns:
-            pkginfos (list) [info1,info2]
-        """
-        return self.pkgname_pkginfo_dict.get(pkgname)
-
     @classmethod
     def _list2dict(cls, dict_list, key):
         """
@@ -318,15 +306,6 @@ class LocalInstalledDataParse(DataParse):
             res.append(pkginfo)
         return res
 
-    def get_pkginfo_byname(self,pkgname):
-        """
-            通过pkgname获取pkginfos
-        Args:
-            pkgname (str)
-        Returns:
-            pkginfos (list) [info1,info2]
-        """
-        return self.pkgname_pkginfo_dict.get(pkgname)
 
     @classmethod
     def _list2dict(cls, dict_list, key):
