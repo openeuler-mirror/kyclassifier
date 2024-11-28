@@ -22,7 +22,6 @@ class RpmInfo():
     """数据类
     """
     def __init__(self, obj):
-        print(dir(obj))
         self.name = obj.name
         self.arch = obj.arch
         self.version = obj.version
@@ -75,7 +74,7 @@ class DataParse(object):
         Returns:
             pkginfos (list) [info1,info2]
         """
-        return self.pkgname_pkginfo_dict.get(pkgname)
+        return self.pkgname_pkginfo_dict.get(pkgname,[])
 
 class ISODataParse(DataParse):
     """
@@ -292,20 +291,8 @@ class LocalInstalledDataParse(DataParse):
         sack.load_system_repo(build_cache=False)
         q = hawkey.Query(sack)
         for p in q:
-            pkginfo = copy.copy(RPMINFO)
-            pkginfo['name'] = p.name
-            pkginfo['arch'] = p.arch
-            pkginfo['version'] = p.version
-            pkginfo['epoch'] = str(p.epoch)
-            pkginfo['release'] = p.release
-            pkginfo['summary'] = p.summary
-            pkginfo['description'] = p.description
-            pkginfo['url'] = p.url
-            pkginfo['rpm_license'] = p.license
-            pkginfo['rpm_vendor'] = p.vendor
-            pkginfo['rpm_group'] = p.group
-            pkginfo['rpm_sourcerpm'] = p.sourcerpm
-            res.append(pkginfo)
+            pkginfo = RpmInfo(p)
+            res.append(pkginfo.as_dict())
         return res
 
 
