@@ -17,20 +17,46 @@ import json
 import hawkey
 import dnf
 
-RPMINFO = {
-    'name' : '',
-    'arch' : '',
-    'version' : '',
-    'epoch' : '',
-    'release' : '',
-    'summary' : '',
-    'description' : '',
-    'url' : '',
-    'rpm_license': '',
-    'rpm_vendor' : '',
-    'rpm_group' : '',
-    'rpm_sourcerpm' : '',
-}
+
+class RpmInfo():
+    """数据类
+    """
+    def __init__(self, obj):
+        print(dir(obj))
+        self.name = obj.name
+        self.arch = obj.arch
+        self.version = obj.version
+        self.epoch = obj.epoch
+        self.release = obj.release
+        self.summary = obj.summary
+        self.description = obj.description
+        self.url = obj.url
+        self.rpm_license = obj.license
+        self.rpm_vendor = obj.vendor if hasattr(obj,'vendor') else ""
+        self.rpm_group = obj.group
+        self.rpm_sourcerpm = obj.sourcerpm
+
+    def as_dict(self):
+        """类属性字段转换为字典
+
+        Returns:
+            dict: 类属性字段转换的字典数据
+        """
+        return {
+            'name' : self.name,
+            'arch' : self.arch,
+            'version' : self.version,
+            'epoch' : self.epoch,
+            'release' : self.release,
+            'summary' : self.summary,
+            'description' : self.description,
+            'url' : self.url,
+            'rpm_license': self.rpm_license,
+            'rpm_vendor' : self.rpm_vendor,
+            'rpm_group' : self.rpm_group,
+            'rpm_sourcerpm' : self.rpm_sourcerpm
+        }
+
 
 class DataParse(object):
     """
@@ -108,20 +134,8 @@ class ISODataParse(DataParse):
         sack.load_repo(repo,load_filelists=True)
         q = hawkey.Query(sack)
         for p in q:
-            pkginfo = copy.copy(RPMINFO)
-            pkginfo['name'] = p.name
-            pkginfo['arch'] = p.arch
-            pkginfo['version'] = p.version
-            pkginfo['epoch'] = str(p.epoch)
-            pkginfo['release'] = p.release
-            pkginfo['summary'] = p.summary
-            pkginfo['description'] = p.description
-            pkginfo['url'] = p.url
-            pkginfo['rpm_license'] = p.license
-            pkginfo['rpm_vendor'] = p.vendor
-            pkginfo['rpm_group'] = p.group
-            pkginfo['rpm_sourcerpm'] = p.sourcerpm
-            res.append(pkginfo)
+            pkginfo = RpmInfo(p)
+            res.append(pkginfo.as_dict())
         return res
 
     @classmethod
@@ -213,20 +227,8 @@ class RepoDataParse(DataParse):
             base.fill_sack(load_system_repo=False)
             pkg_a = base.sack.query().available()
             for p in pkg_a:
-                pkginfo = copy.copy(RPMINFO)
-                pkginfo['name'] = p.name
-                pkginfo['arch'] = p.arch
-                pkginfo['version'] = p.version
-                pkginfo['epoch'] = str(p.epoch)
-                pkginfo['release'] = p.release
-                pkginfo['summary'] = p.summary
-                pkginfo['description'] = p.description
-                pkginfo['url'] = p.url
-                pkginfo['rpm_license'] = p.license
-                pkginfo['rpm_vendor'] = p.vendor
-                pkginfo['rpm_group'] = p.group
-                pkginfo['rpm_sourcerpm'] = p.sourcerpm
-                res.append(pkginfo)
+                pkginfo = RpmInfo(p)
+                res.append(pkginfo.as_dict())
         return res
 
     @classmethod
