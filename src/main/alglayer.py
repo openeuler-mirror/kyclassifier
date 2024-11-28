@@ -15,6 +15,7 @@
 import json
 import copy
 
+
 class AlgLayer(object):
     """
         分层算法模块
@@ -53,15 +54,14 @@ class AlgLayer(object):
         """
         obj = cls(dep_obj,init_f)
         id2pkgs_dict = obj.filter_init_dict(obj.init_id2pkgs_dict,obj.all_pkgs_set)
-        id2pkgs_dict = cls.augment_layered_set(id2pkgs_dict,obj.dep_obj,add_no_depby_pkgs=True)
-        id2pkgs_dict = cls.filter_duplicates(id2pkgs_dict)
-        unfilter_pkg_list = cls.get_unlayered_pkgs(id2pkgs_dict,obj.all_pkgs_set)
-        final_id2pkgs_dict = cls.get_layer_by_reqlayer(id2pkgs_dict,unfilter_pkg_list,obj.dep_obj)
-        pkg2id_dict = cls.get_pkg2id_dict(final_id2pkgs_dict)
+        id2pkgs_dict = obj.augment_layered_set(id2pkgs_dict,obj.dep_obj,add_no_depby_pkgs=True)
+        id2pkgs_dict = obj.filter_duplicates(id2pkgs_dict)
+        unfilter_pkg_list = obj.get_unlayered_pkgs(id2pkgs_dict,obj.all_pkgs_set)
+        final_id2pkgs_dict = obj.get_layer_by_reqlayer(id2pkgs_dict,unfilter_pkg_list,obj.dep_obj)
+        pkg2id_dict = obj.get_pkg2id_dict(final_id2pkgs_dict)
         return pkg2id_dict
 
-    @classmethod
-    def filter_init_dict(cls,id2pkgs_dict,all_pkgs_set):
+    def filter_init_dict(self, id2pkgs_dict, all_pkgs_set):
         """
             排除不在集合中的软件包，生成新的分层字典
         Args:
@@ -76,8 +76,7 @@ class AlgLayer(object):
             res_dict[k] = list(set(v) & set(all_pkgs_set))
         return res_dict
 
-    @classmethod
-    def augment_layered_set(cls,id2pkgs_dict,dep_obj,add_no_depby_pkgs=True):
+    def augment_layered_set(self, id2pkgs_dict, dep_obj, add_no_depby_pkgs=True):
         """
             补充分层集合,把无被依赖软件包加入第4层;把每层的依赖包加入各层级；
         Args:
@@ -101,8 +100,7 @@ class AlgLayer(object):
                 id2pkgs_dict[id] = list(set(id2pkgs_dict[id]))
         return id2pkgs_dict
 
-    @classmethod
-    def filter_duplicates(cls,id2pkgs_dict):
+    def filter_duplicates(self, id2pkgs_dict):
         """
             处理有多个层级的软件包，只保留最低层级
         Args:
@@ -123,8 +121,7 @@ class AlgLayer(object):
             res_dict[k] = list(set(res_dict[k]))
         return res_dict
 
-    @classmethod
-    def get_unlayered_pkgs(cls,id2pkgs_dict,all_pkgs_set):
+    def get_unlayered_pkgs(self, id2pkgs_dict, all_pkgs_set):
         """
             获取还未分层软件包列表
         Args:
@@ -141,8 +138,7 @@ class AlgLayer(object):
         res = list(set(all_pkgs_set) - set(layered_pkgs))
         return res
 
-    @classmethod
-    def get_layer_by_reqlayer(cls,id2pkgs_dict,unfilter_pkg_list,dep_obj):
+    def get_layer_by_reqlayer(self, id2pkgs_dict, unfilter_pkg_list, dep_obj):
         """
             通过依赖关系获取输入未分层软件包的层级
         Args:
@@ -175,11 +171,10 @@ class AlgLayer(object):
                 break
         for i in range(1,5):
             id2pkgs_dict[i] += tmp_dict[i]
-        id2pkgs_dict = cls.filter_duplicates(id2pkgs_dict)
+        id2pkgs_dict = self.filter_duplicates(id2pkgs_dict)
         return id2pkgs_dict
 
-    @classmethod
-    def get_pkg2id_dict(cls,id2pkgs_dict):
+    def get_pkg2id_dict(self, id2pkgs_dict):
         """
             获取pkgname为key,layer_id为value的分层字典
         Args:
