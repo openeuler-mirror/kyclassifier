@@ -65,6 +65,8 @@ class RepoCheck(object):
             with open('/etc/yum.repos.d/check_tmp.repo','w') as f:
                 repo_str = ''
                 for r in repos_l:
+                    if any(not s for s in [r['repo_id'],r['baseurl']]):
+                        return False
                     tmp = '[{}]\nname = kyclassifier-{}\nbaseurl = {}\ngpgcheck = 0\nsslverify = 0\nenabled = 1\n'.format(r['repo_id'],r['repo_id'],r['baseurl'])
                     repo_str += tmp
                 f.write(repo_str)
