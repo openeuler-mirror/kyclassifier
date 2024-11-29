@@ -37,3 +37,8 @@ class BaseConfig():
 
     # util
     ISO_REPODATA_DIR = '/opt/kyclassifier/iso_parse/repodata'
+
+    # logger
+    LOGNAME='kyclassifier'
+    LOG_PATH = '/opt/kyclassifier/output'
+    LOG_FILE_NAME = "kyclassifier.log"

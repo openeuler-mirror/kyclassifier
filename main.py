@@ -27,6 +27,7 @@ from src.utils.util import ISOUtils
 from src.utils.config import BaseConfig
 from src.main.alglayer import AlgLayer
 from src.main.algclassify import AlgClassify
+from src.log.logger import logger, LOGGER
 
 
 class kyClassifier(object):
@@ -54,8 +55,8 @@ class kyClassifier(object):
     def process_local(cls):
         depobj = depparse.LocalInstalledDepParse()
         dataobj = dataparse.LocalInstalledDataParse()
-        layer_res = AlgLayer.run(depobj,LAYERDATA)
-        classify_res =AlgClassify.run(dataobj,CLASSIFYDATA)
+        layer_res = AlgLayer.run(depobj, BaseConfig.LAYERDATA)
+        classify_res =AlgClassify.run(dataobj, BaseConfig.CLASSIFYDATA)
         cls.save_output(layer_res,classify_res)
 
     @staticmethod
@@ -79,14 +80,24 @@ if __name__ == '__main__':
     options = ['-h\n',
                '                   -iso  ISO_FILE_PATH\n',
                '                   -repo\n',
-               '                   -local']
+               '                   -local\n',
+               '                   -console_log']
 
     str_usage = 'kyclassifier ' + ' '.join(options)
     parser = argparse.ArgumentParser(usage=str_usage)
     parser.add_argument('-iso', type=str, help='Input ISO file path')
     parser.add_argument('-repo', action = 'store_true', help='Whether to analyze repo packages.')
     parser.add_argument('-local', action = 'store_true', help='Whether to analyze local installed packages.')
+    parser.add_argument('-console_log', action = 'store_true', help='Output log to console.')
     args = parser.parse_args()
+
+    if len(sys.argv) == 1:
+        parser.print_help()
+
+    if args.console_log:
+        LOGGER.update_console_log(logger)
+
+    logger.info("Start run kyclassifier...")
     if args.iso:
         if not IsoCheck.check(args.iso):
             sys.exit(1)
@@ -96,6 +107,6 @@ if __name__ == '__main__':
             sys.exit(1)
         kyClassifier.process_repo()   
     if args.local:
-        kyClassifier.process_local()  
-    if len(sys.argv) == 1:
-        parser.print_help()
+        kyClassifier.process_local()
+
+    logger.info("Kyclassifier end!")
