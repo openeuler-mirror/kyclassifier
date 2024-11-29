@@ -114,11 +114,8 @@ class ISOUtils(object):
             return repomd_fn[0], primary_fn[0], filelists_fn[0]
 
     @classmethod
-<<<<<<< Updated upstream
-    def parse_iso_repofile(cls,iso_path,target_dir='/opt/kyclassifier/iso_parse/repodata'):
-=======
-    def parase_iso_repofile(cls,iso_path,target_dir=BaseConfig.ISO_REPODATA_DIR):
->>>>>>> Stashed changes
+
+    def parse_iso_repofile(cls,iso_path,target_dir=BaseConfig.ISO_REPODATA_DIR):
         """
             解析ISO数据文件
         Args:

@@ -36,7 +36,7 @@ class TestRepoCheck(unittest.TestCase):
             os.remove(self.repofile)
 
         if os.path.exists(self.dst_repofile):
-            os.remove(self.repofile)
+            os.remove(self.dst_repofile)
 
     def test_check_exist(self):
         """Test class method check_exist()

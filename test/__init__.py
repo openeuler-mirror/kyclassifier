@@ -23,6 +23,9 @@ import unittest
 
 from test_repocheck import TestRepoCheck
 from test_util import TestUtil
+from test_dataparse import TestDataParse
+from test_dataparse import TestDataParse
+from test_isocheck import TestIsoCheck
 
 
 if __name__ == "__main__":
