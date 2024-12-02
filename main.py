@@ -28,6 +28,7 @@ from src.utils.config import BaseConfig
 from src.main.alglayer import AlgLayer
 from src.main.algclassify import AlgClassify
 from src.log.logger import logger, LOGGER
+from src.report.report_generator import ReportGenerator
 
 
 class kyClassifier(object):
@@ -61,19 +62,31 @@ class kyClassifier(object):
 
     @staticmethod
     def save_output(pkg2layer,pkg2category):
+        os_data = util.get_localos_data()
         JSON_OUTPATH = (
             (pkg2layer,'pkg2layer.json'),
             (pkg2category,'pkg2category.json'),
+            (os_data,'osinfo.json')
         )
         formatted_time = util.get_formatted_time()
         dir_path = '/opt/kyclassifier/output/{}/'.format(formatted_time)
         json_path = '{}json/'.format(dir_path)
+        html_path = '{}html/'.format(dir_path)
         os.makedirs(dir_path)
         os.makedirs(json_path)
+        os.makedirs(html_path)
         for tup in JSON_OUTPATH:
             with open(json_path + tup[1],'w') as f:
                 json.dump(tup[0],f)
         print(("Output json file saved at {}").format(json_path))    
+        report_generator = ReportGenerator(
+            os.path.join(json_path,'pkg2category.json'),
+            os.path.join(json_path,'pkg2layer.json'),
+            os.path.join(json_path,'osinfo.json'),
+            html_path,
+            'Report.html')
+        report_generator.generate_result_file()
+        print(("Output html file saved at {}").format(html_path))  
 
 
 if __name__ == '__main__':
