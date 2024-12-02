@@ -105,6 +105,32 @@ class TestDepParse(unittest.TestCase):
         result = self.repo_depparse._load_data()
         self.assertIsInstance(result,list,"repo_depparse._load_data test failed!")
 
+    def test_repo_get_all_pkgs(self):
+        """
+            Test class RepoDepParse method _get_all_pkgs()
+        Returns:
+            set
+        """
+        if not RepoCheck:
+            self.skipTest("Repo check failed, test skiped!")
+        if not self._init_repo_depparse():
+            self.skipTest("RepoDepParse obj init failed, test skiped!")
+        result = self.repo_depparse._get_all_pkgs()
+        self.assertIsInstance(result,set,"repo_depparse._get_all_pkgs test failed!")
+
+    def test_repo_get_repo_pkg_deps(self):
+        """
+            Test class RepoDepParse method _get_repo_pkg_deps()
+        Returns:
+            dict
+        """
+        if not RepoCheck:
+            self.skipTest("Repo check failed, test skiped!")
+        if not self._init_repo_depparse():
+            self.skipTest("RepoDepParse obj init failed, test skiped!")
+        result = self.repo_depparse._get_repo_pkg_deps()
+        self.assertIsInstance(result,dict,"repo_depparse._get_repo_pkg_deps test failed!")
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
