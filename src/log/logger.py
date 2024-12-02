@@ -29,8 +29,8 @@ class LOGGER():
         log_file = os.path.join(BaseConfig.LOG_PATH, BaseConfig.LOG_FILE_NAME)
 
         # Create a custom logger
-        logger_1 = logging.getLogger(BaseConfig.LOGNAME)
-        logger_1.setLevel(logging.DEBUG)
+        custom_logger = logging.getLogger(BaseConfig.LOGNAME)
+        custom_logger.setLevel(logging.DEBUG)
 
         # Create file handler with RotatingFileHandler
         f_handler = RotatingFileHandler(log_file)
@@ -41,9 +41,9 @@ class LOGGER():
         f_handler.setFormatter(F_formatter)
 
         # Add handlers to the logger
-        logger_1.addHandler(f_handler)
+        custom_logger.addHandler(f_handler)
 
-        return logger_1
+        return custom_logger
 
     @classmethod
     def update_console_log(cls, logger):

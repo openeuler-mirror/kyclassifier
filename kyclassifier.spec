@@ -1,6 +1,6 @@
 Name:           kyclassifier
 Version:        1.1
-Release:        0
+Release:        1
 Summary:        Use for analyzes layers and categories information of packages in openEuler.
 License:        Mulan PSL v2
 Source0:        kyclassifier-%{version}.tar.gz
@@ -34,6 +34,9 @@ rm -rf 	%{_builddir}/*
 
 
 %changelog
+* Mon Dec 02 2024 ZhaoYu Jiang <jiangzhaoyu@kylinos.cn> - 1.1-1
+- Enhanced Code Lint, Add Support for system-release not exist scenario, guarded RPMInfo attribute for not exist scenario.
+
 * Tue Nov 26 2024 Sheng Ding <dingsheng@kylinos.cn> -1.1-0
 - RPM packages can be analyzed in iso, repo, and local environments.
 

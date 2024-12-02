@@ -30,10 +30,7 @@ class IsoCheck(object):
         """
             检查文件存在性
         """
-        if not os.path.exists(self.path):
-            return False
-        else:
-            return True
+        return os.path.exists(self.path)
         
     def check_format(self):
         """
