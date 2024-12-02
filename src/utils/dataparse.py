@@ -35,7 +35,7 @@ class RpmInfo():
         self.rpm_license = obj.license
         self.rpm_vendor = obj.vendor if hasattr(obj,'vendor') else ""
         self.rpm_group = obj.group
-        self.rpm_sourcerpm = obj.sourcerpm
+        self.rpm_sourcerpm = obj.sourcerpm if hasattr(obj, 'sourcerpm') else ""
 
     def as_dict(self):
         """类属性字段转换为字典
@@ -177,8 +177,6 @@ class RepoDataParse(DataParse):
         Returns:
             res: 仓库配置数据
         """
-
-
         with open(BaseConfig.REPODATA, 'r') as f:
             res = json.load(f)
         return res

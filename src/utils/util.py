@@ -46,9 +46,21 @@ def get_localos_data():
     Returns:
         os_data (dict): 部署系统信息数据
     """
-    with open('/etc/system-release','r') as f:
-        os_info = f.read().strip()
-    kernel_info = platform.release()
+    try:
+        with open('/etc/system-release','r') as f:
+            os_info = f.read().strip()
+    except FileNotFoundError:
+        release_info = {}
+        try:
+            with open('/etc/os-release') as f:
+                for line in f:
+                    if '=' in line:
+                        key, value = line.strip().split('=', 1)
+                        release_info[key] = value.strip('"')
+        except FileNotFoundError as e:
+            raise FileNotFoundError(e)
+        os_info = release_info["PRETTY_NAME"]
+    kernel_info = platform.uname()
     if not isinstance(os_info,str):
         os_info = 'linux'
     if not isinstance(kernel_info,str):
@@ -114,7 +126,6 @@ class ISOUtils(object):
             return repomd_fn[0], primary_fn[0], filelists_fn[0]
 
     @classmethod
-
     def parse_iso_repofile(cls,iso_path,target_dir=BaseConfig.ISO_REPODATA_DIR):
         """
             解析ISO数据文件

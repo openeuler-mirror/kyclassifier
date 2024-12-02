@@ -31,10 +31,7 @@ class RepoCheck(object):
         Returns:
             bool : 返回检查结果
         """
-        if not os.path.exists(BaseConfig.REPODATA):
-            return False
-        else:
-            return True
+        return os.path.exists(BaseConfig.REPODATA)
         
     @classmethod
     def _load_data(cls):
@@ -45,8 +42,7 @@ class RepoCheck(object):
         """
         try:
             with open(BaseConfig.REPODATA, 'r') as f:
-                repos = json.load(f)
-                return repos
+                return json.load(f)
         except:
             return []
 
