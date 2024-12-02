@@ -15,7 +15,7 @@
 
 import unittest
 
-from src.utils.dataparse import ISODataParse, RepoDataParse
+from src.utils.dataparse import ISODataParse, RepoDataParse, LocalInstalledDataParse
 from src.utils.repocheck import RepoCheck
 
 
@@ -135,7 +135,29 @@ class TestDataParse(unittest.TestCase):
             result = RepoDataParse.get_pkgsinfo_list()
             self.assertIsInstance(result,list,"get_pkgsinfo_list test failed!")
 
+    def test_repo_list2dict(self):
+        """
+            Test class RepoDataParse method _list2dict()
+        Returns:
+            list
+        """
+        if not RepoCheck.check():
+            self.skipTest("Repo check failed, test skiped!")
+        else:
+            dict_list = [{'pkgname':'aaa'},
+                         {'pkgname':'bbb'}]
+            key = 'pkgname'
+            result = RepoDataParse._list2dict(dict_list,key)
+            self.assertIsInstance(result,dict,"_list2dict test failed!")
 
+    def test_local_get_pkgname_set(self):
+        """
+            Test class LocalInstalledDataParse method get_pkgname_set()
+        Returns:
+            set
+        """
+        result = LocalInstalledDataParse.get_pkgname_set()
+        self.assertIsInstance(result,set,"get_pkgname_set test failed!")
 
 
 if __name__ == "__main__":
