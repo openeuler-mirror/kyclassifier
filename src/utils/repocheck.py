@@ -120,6 +120,9 @@ class RepoCheck(object):
         cls.move_repofiles(repo_dir,backup_dir)
         repos_l = cls._load_data()
         if not cls._create_repofile(repos_l):
+            cls.remove_repofiles(repo_dir)
+            cls.move_repofiles(backup_dir,repo_dir)
+            shutil.rmtree(backup_dir)
             return False
         try:
             cmd = 'dnf clean all $1>/dev/null 2>&1 && dnf makecache  --setopt=retries=1 $1>/dev/null 2>&1'
