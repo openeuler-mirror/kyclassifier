@@ -129,10 +129,7 @@ class RepoCheck(object):
             cls.remove_repofiles(repo_dir)
             cls.move_repofiles(backup_dir,repo_dir)
             shutil.rmtree(backup_dir)
-        if res == 0:
-            return True
-        else:
-            return False
+        return res == 0
 
     @classmethod
     def check(cls):
@@ -142,9 +139,7 @@ class RepoCheck(object):
         if not cls.check_exist():
             print(BaseConfig.REPO_CHECK_ERROR_INFO.get(1001,''))
             return False
-        elif not cls.check_repo_useful():
+        if not cls.check_repo_useful():
             print(BaseConfig.REPO_CHECK_ERROR_INFO.get(1002,''))
             return False
-        else:
-            return True
-
+        return True
