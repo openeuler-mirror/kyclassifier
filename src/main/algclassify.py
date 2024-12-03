@@ -35,7 +35,8 @@ class AlgClassify(object):
         """
         category_d1 = cls._get_pkg2category_by_jsonf(json_f)
         category_d2 = cls._get_pkg2category_by_rpmgroup(data_obj)
-        res = cls._merge_pkg2category_dict(data_obj,category_d1,category_d2)
+        category_d3 = cls._get_pkg2category_by_srcrpm(data_obj,category_d1,category_d2)
+        res = cls._merge_pkg2category_dict(data_obj,category_d1,category_d2,category_d3)
         return res
 
     @staticmethod
@@ -85,6 +86,38 @@ class AlgClassify(object):
             else:
                 continue
         return res
+    
+    @staticmethod
+    def _get_pkg2category_by_srcrpm(data_obj,*args):
+        """
+            通过所属源码包信息补充软件包类别
+        Args:
+            data_obj: DataParse类对象
+
+        Returns:
+            no_classinfo_dict: 分类字典
+        """
+        pkgnames = data_obj.pkgs_name
+        res = { p:[] for p in pkgnames}
+        dict_l = [d for d in args] if args else []
+        for p in pkgnames:
+            category_l = [d.get(p,[]) for d in dict_l]
+            category = list(chain.from_iterable(category_l))
+            res[p] = copy.deepcopy(category)
+
+        # 对无分类信息的软件包，通过所属源码包信息获取软件包类别
+        no_classinfo_dict = { p:v for p,v in res.items() if not v}
+        for p,v in no_classinfo_dict.items():
+            # 获取无分类信息的二进制包所属的源码包
+            # 将该源码包下其它二进制包的分类信息，同步到该二进制包
+            srcrpm_list = [d.get('rpm_sourcerpm', '') for d in data_obj.pkgname_pkginfo_dict.get(p, [])]
+            rpmname_list = []
+            for srcrpm in srcrpm_list:
+                rpmname_list.extend([d.get('name', '') for d in data_obj.srcrpm_pkginfo_dict.get(srcrpm, []) if d.get('name', '') != p])
+            lists = [res.get(rpmname, []) for rpmname in rpmname_list]
+            no_classinfo_dict[p] = list(set(list(chain(*lists))))
+
+        return no_classinfo_dict
 
     @classmethod
     def _get_pkg2category_by_jsonf(cls,jsonf):
