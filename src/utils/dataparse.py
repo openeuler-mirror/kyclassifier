@@ -36,6 +36,7 @@ class RpmInfo():
         self.rpm_vendor = obj.vendor if hasattr(obj,'vendor') else ""
         self.rpm_group = obj.group
         self.rpm_sourcerpm = obj.sourcerpm if hasattr(obj, 'sourcerpm') else ""
+        self.rpm_files = obj.files
 
     def as_dict(self):
         """类属性字段转换为字典
@@ -55,7 +56,8 @@ class RpmInfo():
             'rpm_license': self.rpm_license,
             'rpm_vendor' : self.rpm_vendor,
             'rpm_group' : self.rpm_group,
-            'rpm_sourcerpm' : self.rpm_sourcerpm
+            'rpm_sourcerpm' : self.rpm_sourcerpm,
+            'rpm_files' : self.rpm_files
         }
 
 
