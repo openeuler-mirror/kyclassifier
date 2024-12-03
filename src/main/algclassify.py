@@ -16,6 +16,7 @@ import json
 import os
 import copy 
 from itertools import chain
+import re
 
 class AlgClassify(object): 
     """
@@ -36,7 +37,8 @@ class AlgClassify(object):
         category_d1 = cls._get_pkg2category_by_jsonf(json_f)
         category_d2 = cls._get_pkg2category_by_rpmgroup(data_obj)
         category_d3 = cls._get_pkg2category_by_srcrpm(data_obj,category_d1,category_d2)
-        res = cls._merge_pkg2category_dict(data_obj,category_d1,category_d2,category_d3)
+        category_d4 = cls._get_pkg2category_by_rpmfiles(data_obj)
+        res = cls._merge_pkg2category_dict(data_obj,category_d1,category_d2,category_d3,category_d4)
         return res
 
     @staticmethod
@@ -85,6 +87,36 @@ class AlgClassify(object):
                 res.update({name:[rpm_group]})
             else:
                 continue
+        return res
+    
+    @staticmethod
+    def _get_pkg2category_by_rpmfiles(data_obj):
+        """
+            通过软件包文件列表添加软件包类别信息
+        Args:
+            data_obj: DataParse类对象
+
+        Returns:
+            res: 分类字典
+        """
+
+        pattern_dict = {
+            '^/usr/share/man/' : '帮助与文档',
+            '^/usr/share/doc/' : '帮助与文档',
+            '^/usr/lib/systemd/system/.*\.service$' : '服务'
+        }
+        res = {}
+        pkgsinfo = data_obj.pkgs_info
+        for p in pkgsinfo:
+            name = p.get('name')
+            rpm_files = p.get('rpm_files')
+            classlist = []
+            for pattern,classinfo in pattern_dict.items():
+                for file in rpm_files:
+                    if re.match(pattern, file):
+                        classlist.append(classinfo)
+                        break
+            res[name] = list(set(classlist))
         return res
     
     @staticmethod
