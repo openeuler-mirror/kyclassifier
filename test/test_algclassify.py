@@ -61,13 +61,34 @@ class TestAlgClassify(unittest.TestCase):
             self.assertIsInstance(result,dict,"_load_data test failed!")
 
     def test_get_pkgs(self):
-        pass
+        """
+            Test class AlgClassify method _get_pkgs()
+        Returns:
+            set
+        """
+        result = AlgClassify._get_pkgs(self.data_obj)
+        self.assertIsInstance(result,set,"_get_pkgs test failed!")
 
     def test_get_pkg2category_by_rpmgroup(self):
-        pass
+        """
+            Test class AlgClassify method _get_pkg2category_by_rpmgroup()
+        Returns:
+            dict
+        """
+        result = AlgClassify._get_pkg2category_by_rpmgroup(self.data_obj)
+        self.assertIsInstance(result,dict,"_get_pkg2category_by_rpmgroup test failed!")
 
     def test_get_pkg2category_by_jsonf(self):
-        pass
+        """
+            Test class AlgClassify method _get_pkg2category_by_jsonf()
+        Returns:
+            dict
+        """
+        if not os.path.exists(self.data_f):
+            self.skipTest("Test File not exists, test skiped!")
+        else:
+            result = AlgClassify._get_pkg2category_by_jsonf(self.data_f)
+            self.assertIsInstance(result,dict,"_get_pkg2category_by_jsonf test failed!")
 
     def test_merge_pkg2category_dict(self):
         pass
