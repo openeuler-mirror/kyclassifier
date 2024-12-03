@@ -91,6 +91,7 @@ class ISODataParse(DataParse):
         self.pkgs_name = self.get_pkgname_set(files_path)
         self.pkgs_info = self.get_pkgsinfo_list(files_path)
         self.pkgname_pkginfo_dict = self._list2dict(self.pkgs_info,"name")
+        self.srcrpm_pkginfo_dict = self._list2dict(self.pkgs_info,"rpm_sourcerpm")
 
     @classmethod
     def get_pkgname_set(cls,files_path):
@@ -167,6 +168,7 @@ class RepoDataParse(DataParse):
         self.pkgs_name = self.get_pkgname_set()
         self.pkgs_info = self.get_pkgsinfo_list()
         self.pkgname_pkginfo_dict = self._list2dict(self.pkgs_info,"name")
+        self.srcrpm_pkginfo_dict = self._list2dict(self.pkgs_info,"rpm_sourcerpm")
     
     @classmethod
     def _load_data(cls):
@@ -263,6 +265,7 @@ class LocalInstalledDataParse(DataParse):
         self.pkgs_name = self.get_pkgname_set()
         self.pkgs_info = self.get_pkgsinfo_list()
         self.pkgname_pkginfo_dict = self._list2dict(self.pkgs_info,"name")
+        self.srcrpm_pkginfo_dict = self._list2dict(self.pkgs_info,"rpm_sourcerpm")
 
     @classmethod
     def get_pkgname_set(cls):
