@@ -16,7 +16,8 @@ import os
 import time
 import platform
 from fnmatch import fnmatch
-import isoparser
+
+import pycdlib
 
 from .config import BaseConfig
 
@@ -85,12 +86,24 @@ class ISOUtils(object):
             repodata_dir (string, optional): repodata目录. Defaults to '/opt/kyclassifier/iso_parse/repodata'.
         """
         os.makedirs(repodata_dir,exist_ok=True)
-        iso = isoparser.parse(iso_path)
-        for repo in iso.record(b'repodata').children:
-            file_name = repo.name.decode('utf-8')
-            content = repo.get_stream().read()
-            with open(os.path.join(repodata_dir,file_name),'wb') as f:
-                f.write(content)
+
+        iso = pycdlib.PyCdlib()
+        try:
+            iso.open(iso_path)
+            iso_path_dir = '/repodata'
+
+            for child in iso.list_children(iso_path=iso_path_dir):
+                if child.is_file():
+                    file = child.file_identifier().decode()
+                    path = os.path.join(iso_path_dir, file)
+
+                    save_file = child.rock_ridge.name().decode()
+                    with open(os.path.join(repodata_dir, save_file), 'wb') as f:
+                        iso.get_file_from_iso_fp(f, iso_path=path)
+
+            iso.close()
+        except pycdlib.pycdlibexception.PyCdlibException as e:
+            pass
 
     @staticmethod
     def get_repo_from_dir(repodata_dir=BaseConfig.ISO_REPODATA_DIR):
