@@ -13,6 +13,8 @@
 # **********************************************************************************
 """
 import os
+import struct
+
 import pycdlib
 
 from .exceptions import ISOCheckError
@@ -35,23 +37,22 @@ class IsoCheck(object):
     def check_format(self):
         """
             检查iso格式是否正确
+
+        ISO文件必须包含repodata目录
         """
+        iso = pycdlib.PyCdlib()
         try:
-            iso = pycdlib.PyCdlib()
+            check_result = False
             iso.open(self.path)
-            os_dirs = [
-                'repodata',
-            ]
-            found_dirs = set()
-            for dirpath, dirnames, filenames in iso.walk(iso_path='/'):
-                dirname = dirpath.strip('/').lower()
-                if dirname in os_dirs:
-                    found_dirs.add(dirname)
-                else:
-                    continue
+
+            entry = iso.get_entry(iso_path='/repodata')
+            if entry.is_dir():
+                check_result = True
+
             iso.close()
-            return True if found_dirs == set(os_dirs) else False
-        except ISOCheckError as e:
+
+            return check_result
+        except (ISOCheckError, pycdlib.pycdlibexception.PyCdlibException, struct.error) as e:
             print("Error checking ISO: {}".format(str(e)))
             return False
         
