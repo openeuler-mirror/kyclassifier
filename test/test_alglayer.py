@@ -55,14 +55,46 @@ class TestAlglayer(unittest.TestCase):
             dict()
         """
         if not self._init_alglayer():
-            self.skipTest("Init iso_dataparse failed, test skiped!")
+            self.skipTest("Init AlgLayer failed, test skiped!")
         else:
             result = self.alglayer._load_init_data(self.files_path)
             self.assertIsInstance(result, dict, "_load_init_data test failed!")
-
     
-
-
-
+    def test_filter_init_dict(self):
+        """
+            Test class AlgLayer method filter_init_dict(()
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init AlgLayer failed, test skiped!")
+        else:
+            result = self.alglayer.filter_init_dict(self.alglayer.init_id2pkgs_dict,self.depobj.all_pkgs)
+            self.assertIsInstance(result, dict, "filter_init_dict( test failed!")
+    
+    def test_augment_layered_set(self):
+        """
+            Test class AlgLayer method augment_layered_seta()
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init AlgLayer failed, test skiped!")
+        else:
+            result = self.alglayer.augment_layered_set(self.alglayer.init_id2pkgs_dict,self.depobj)
+            self.assertIsInstance(result, dict, "augment_layered_set test failed!")
+    
+    def test_filter_duplicates(self):
+        """
+            Test class AlgLayer method filter_duplicates
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init AlgLayer failed, test skiped!")
+        else:
+            result = self.alglayer.filter_duplicates(self.alglayer.init_id2pkgs_dict)
+            self.assertIsInstance(result, dict, "filter_duplicates test failed!")
+    
 if __name__ == "__main__":
     unittest.main(verbosity=2)
