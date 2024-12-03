@@ -16,6 +16,7 @@ import copy
 import json
 import hawkey
 import dnf
+import os
 
 from .config import BaseConfig
 
@@ -268,6 +269,7 @@ class LocalInstalledDataParse(DataParse):
         self.pkgs_info = self.get_pkgsinfo_list()
         self.pkgname_pkginfo_dict = self._list2dict(self.pkgs_info,"name")
         self.srcrpm_pkginfo_dict = self._list2dict(self.pkgs_info,"rpm_sourcerpm")
+        self.os_vendor = self.get_os_vendor(self.pkgs_info)
 
     @classmethod
     def get_pkgname_set(cls):
@@ -303,6 +305,21 @@ class LocalInstalledDataParse(DataParse):
             res.append(pkginfo.as_dict())
         return res
 
+    @classmethod
+    def get_os_vendor(cls, pkgs_info):
+        """
+            获取当前系统的vendor信息
+        Returns:
+            os_vendor (str): 当前系统的vendor信息
+        """
+        release_file = '/etc/system-release'
+        if not os.path.exists(release_file):
+            return ''
+        pkgs = pkgs_info
+        for pkg in pkgs:
+            if release_file in pkg.get('rpm_files', []):
+                return pkg.get('rpm_vendor', '')
+        return ''
 
     @classmethod
     def _list2dict(cls, dict_list, key):
