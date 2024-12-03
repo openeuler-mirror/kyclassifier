@@ -108,15 +108,13 @@ class ISOUtils(object):
 
         for root, _, files in os.walk(path):
             for f in files:
+                subpath = os.path.join(root, f)
                 if fnmatch(f,'repomd.xml'):
-                    repomd_path = os.path.join(root, f)
-                    repomd_fn.append(repomd_path)
+                    repomd_fn.append(subpath)
                 elif fnmatch(f,'*primary.xml.*'):
-                    primary_path = os.path.join(root, f)
-                    primary_fn.append(primary_path)
+                    primary_fn.append(subpath)
                 elif fnmatch(f,'*filelists.xml.*'):
-                    filelists_path = os.path.join(root, f)
-                    filelists_fn.append(filelists_path)
+                    filelists_fn.append(subpath)
                 else:
                     continue
 
