@@ -14,6 +14,7 @@
 """
 import os
 import unittest
+import copy
 
 from src.main.algclassify import AlgClassify
 from src.utils.dataparse import DataParse
@@ -26,8 +27,8 @@ class TestAlgClassify(unittest.TestCase):
 
     def setUp(self):
         data_obj = DataParse()
-        data_obj.pkgs_name = {'aaa'}
-        pkgs_info = [{
+        data_obj.pkgs_name = {'aaa', 'aaa-devel'}
+        main_rpminfo = {
             'name' : 'aaa',
             'arch' : 'x86_64',
             'version' : '1.0',
@@ -39,12 +40,24 @@ class TestAlgClassify(unittest.TestCase):
             'rpm_license': 'aaa.rpm_license',
             'rpm_vendor' : 'aaa.rpm_vendor',
             'rpm_group' : 'aaa.rpm_group',
-            'rpm_sourcerpm' : 'aaa.rpm_sourcerpm'},]
+            'rpm_sourcerpm' : 'aaa.rpm_sourcerpm',
+            'rpm_files' : [
+                '/usr/share/doc/aaa.txt',
+                '/usr/lib/systemd/system/aaa.service',
+                '/etc/aaa.conf'
+            ]}
+        devel_rpminfo = copy.deepcopy(main_rpminfo)
+        devel_rpminfo.update({
+            'name' : 'aaa-devel',
+            'rpm_files' : []
+        })
+        pkgs_info = [main_rpminfo, devel_rpminfo]
         data_obj.pkgs_info = pkgs_info
-        data_obj.pkgname_pkginfo_dict = {'aaa' : pkgs_info}
+        data_obj.pkgname_pkginfo_dict = {'aaa' : [main_rpminfo], 'aaa-devel' : [devel_rpminfo]}
+        data_obj.srcrpm_pkginfo_dict = {'aaa.rpm_sourcerpm' : [main_rpminfo, devel_rpminfo]}
         self.data_obj = data_obj
         self.data_f = BaseConfig.CLASSIFYDATA
-        
+
     def tearDown(self):
         pass
 
@@ -77,6 +90,33 @@ class TestAlgClassify(unittest.TestCase):
         """
         result = AlgClassify._get_pkg2category_by_rpmgroup(self.data_obj)
         self.assertIsInstance(result,dict,"_get_pkg2category_by_rpmgroup test failed!")
+
+    def test_get_pkg2category_by_rpmfiles(self):
+        """
+            Test class AlgClassify method _get_pkg2category_by_rpmfiles()
+        Returns:
+            dict
+        """
+        result = AlgClassify._get_pkg2category_by_rpmfiles(self.data_obj)
+        self.assertIsInstance(result,dict,"_get_pkg2category_by_rpmfiles test failed!")
+        self.assertIn('帮助与文档',result.get('aaa', []),"The category of package aaa test failed!")
+        self.assertIn('服务',result.get('aaa', []),"The category of package aaa test failed!")
+
+    def test_get_pkg2category_by_srcrpm(self):
+        """
+            Test class AlgClassify method _get_pkg2category_by_srcrpm()
+        Returns:
+            dict
+        """
+        main_rpm_dict = {
+            'aaa' : ['category1']
+        }
+        devel_rpm_dict = {
+            'aaa-devel' : []
+        }
+        result = AlgClassify._get_pkg2category_by_srcrpm(self.data_obj,main_rpm_dict,devel_rpm_dict)
+        self.assertIsInstance(result,dict,"_get_pkg2category_by_srcrpm test failed!")
+        self.assertIn('category1',result.get('aaa-devel', []),"The category of package aaa-devel test failed!")
 
     def test_get_pkg2category_by_jsonf(self):
         """
