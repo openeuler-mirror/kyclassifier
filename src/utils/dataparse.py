@@ -12,7 +12,6 @@
 # See the Mulan PSL v2 for more details.
 # **********************************************************************************
 """
-import copy
 import json
 import hawkey
 import dnf
@@ -283,16 +282,10 @@ class LocalInstalledDataParse(DataParse):
         Returns:
             pkgname_set (set): 本地已安装pkgname集合
         """
-        res = set()
         sack = hawkey.Sack()
         sack.load_system_repo(build_cache=False)
-        q = hawkey.Query(sack)
-        for p in q:
-            if p.name:
-                res.add(p.name)
-            else:
-                continue
-        return res
+        return {p.name for p in hawkey.Query(sack) if p.name}
+
 
     @classmethod
     def get_pkgsinfo_list(cls):
@@ -339,8 +332,5 @@ class LocalInstalledDataParse(DataParse):
         res = {}
         for d in dict_list:
             v = d.get(key)
-            if v not in res.keys():
-                res[v] = [d]
-            else:
-                res[v].append(d)
+            res.setdefault(v, []).append(d)
         return res

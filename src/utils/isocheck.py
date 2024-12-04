@@ -70,8 +70,7 @@ class IsoCheck(object):
         if not obj.check_exist():
             print(BaseConfig.ISO_CHECK_ERROR_INFO.get(1001,''))
             return False
-        elif not obj.check_format():
+        if not obj.check_format():
             print(BaseConfig.ISO_CHECK_ERROR_INFO.get(1002,''))
             return False
-        else:
-            return True
+        return True
