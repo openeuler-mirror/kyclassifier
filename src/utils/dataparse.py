@@ -70,6 +70,7 @@ class DataParse(object):
         self.pkgs_name = set()
         self.pkgs_info = []
         self.pkgname_pkginfo_dict = {}
+        self.srcrpm_pkginfo_dict = {}
         
     def get_pkginfo_byname(self, pkgname):
         """
