@@ -182,9 +182,13 @@ class RepoDataParse(DataParse):
         Returns:
             res: 仓库配置数据
         """
-        with open(BaseConfig.REPODATA, 'r') as f:
-            res = json.load(f)
-        return res
+        try:
+            with open(BaseConfig.REPODATA, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print("Failed to read or parse the file:{}".format(e))
+            return []
+
 
     @classmethod
     def get_pkgname_set(cls):

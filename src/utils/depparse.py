@@ -139,9 +139,12 @@ class RepoDepParse(DepParse):
         Returns:
             res (list): 仓库配置数据
         """
-        with open(BaseConfig.REPODATA, 'r') as f:
-            res = json.load(f)
-        return res
+        try:
+            with open(BaseConfig.REPODATA, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print("Failed to read or parse the file:{}".format(e))
+            return []
 
     def _get_all_pkgs(self):
         """
