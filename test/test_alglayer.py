@@ -96,5 +96,52 @@ class TestAlglayer(unittest.TestCase):
             result = self.alglayer.filter_duplicates(self.alglayer.init_id2pkgs_dict)
             self.assertIsInstance(result, dict, "filter_duplicates test failed!")
     
+    def test_get_unlayered_pkgs(self):
+        """
+            Test class AlgLayer method get_unlayered_pkgs
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init AlgLayer failed, test skiped!")
+        else:
+            result = self.alglayer.get_unlayered_pkgs(self.alglayer.init_id2pkgs_dict,self.depobj.all_pkgs)
+            self.assertIsInstance(result, dict, "get_unlayered_pkgs test failed!")
+    
+    def test_get_layer_by_reqlayer(self):
+        """
+            Test class AlgLayer method get_layer_by_reqlayer
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init AlgLayer failed, test skiped!")
+        else:
+            result = self.alglayer.get_layer_by_reqlayer(self.alglayer.init_id2pkgs_dict,[],self.depobj)
+            self.assertIsInstance(result, dict, "get_layer_by_reqlayer test failed!")
+    def test_get_pkg2id_dict(self):
+        """
+            Test class AlgLayer method get_pkg2id_dict
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init AlgLayer failed, test skiped!")
+        else:
+            result = self.alglayer.get_pkg2id_dict(self.alglayer.init_id2pkgs_dict)
+            self.assertIsInstance(result, dict, "get_pkg2id_dict test failed!")
+    
+    def test_run(self):
+        """
+            Test class AlgLayer method run
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init AlgLayer failed, test skiped!")
+        else:
+            result = self.alglayer.run(self.depobj,self.files_path)
+            self.assertIsInstance(result, dict, "run test failed!")
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
