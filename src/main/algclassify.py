@@ -38,7 +38,8 @@ class AlgClassify(object):
         category_d2 = cls._get_pkg2category_by_rpmgroup(data_obj)
         category_d3 = cls._get_pkg2category_by_srcrpm(data_obj,category_d1,category_d2)
         category_d4 = cls._get_pkg2category_by_rpmfiles(data_obj)
-        res = cls._merge_pkg2category_dict(data_obj,category_d1,category_d2,category_d3,category_d4)
+        category_d5 = cls._get_pkg2category_by_rpmvendor(data_obj)
+        res = cls._merge_pkg2category_dict(data_obj,category_d1,category_d2,category_d3,category_d4,category_d5)
         return res
 
     @staticmethod
@@ -119,6 +120,26 @@ class AlgClassify(object):
             res[name] = list(set(classlist))
         return res
     
+    @staticmethod
+    def _get_pkg2category_by_rpmvendor(data_obj):
+        """
+            通过软件包vendor信息对第三方软件包分类
+        Args:
+            data_obj: DataParse类对象
+
+        Returns:
+            res: 分类字典
+        """
+        res = {}
+        if not hasattr(data_obj,'os_vendor') or not data_obj.os_vendor:
+            return res
+        pkgsinfo = pkgsinfo = data_obj.pkgs_info
+        for p in pkgsinfo:
+            rpm_vendor = p.get('rpm_vendor', '')
+            if rpm_vendor != data_obj.os_vendor:
+                res[p['name']] = ['第三方软件包']
+        return res
+
     @staticmethod
     def _get_pkg2category_by_srcrpm(data_obj,*args):
         """
