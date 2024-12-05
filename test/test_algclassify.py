@@ -157,7 +157,16 @@ class TestAlgClassify(unittest.TestCase):
         self.assertEqual(result['aaa-devel'], ['其它'], "_merge_pkg2category_dict test failed!")
 
     def test_run(self):
-        pass
+        """
+            Test class AlgClassify method run()
+        Returns:
+            dict
+        """
+        if not os.path.exists(self.data_f):
+            self.skipTest("Test File not exists, test skiped!")
+        else:
+            result = AlgClassify.run(self.data_obj,self.data_f)
+            self.assertIsInstance(result,dict,"run test failed!")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
