@@ -171,6 +171,15 @@ class TestDataParse(unittest.TestCase):
         result = LocalInstalledDataParse.get_pkgname_set()
         self.assertIsInstance(result,set,"get_pkgname_set test failed!")
 
+    def test_get_pkgsinfo_list(self):
+        """
+            Test class LocalInstalledDataParse method get_pkgsinfo_list()
+        Returns:
+            list
+        """
+        result = LocalInstalledDataParse.get_pkgsinfo_list()
+        self.assertIsInstance(result,list,"get_pkgsinfo_list test failed!")
+
     def test_get_os_vendor(self):
         """
             Test class LocalInstalledDataParse method get_os_vendor()
@@ -182,6 +191,47 @@ class TestDataParse(unittest.TestCase):
         else:
             result = LocalInstalledDataParse.get_os_vendor(self.local_dataparse.pkgs_info)
             self.assertIsInstance(result,str,"get_os_vendor test failed!")
+
+    def test_local_list2dict(self):
+        """
+            Test class LocalInstalledDataParse method _list2dict()
+        Returns:
+            list
+        """
+        input_list = [
+            {
+                'name' : 'aaa',
+                'srcrpm' : 'aaa_srcrpm'
+            },
+            {
+                'name' : 'aaa-devel',
+                'srcrpm' : 'aaa_srcrpm'
+            },
+            {
+                'name' : 'bbb',
+                'srcrpm' : 'bbb_srcrpm'
+            }
+        ]
+        expect_dict = {
+            'aaa_srcrpm' : [
+                {
+                    'name' : 'aaa',
+                    'srcrpm' : 'aaa_srcrpm'
+                },
+                {
+                    'name' : 'aaa-devel',
+                    'srcrpm' : 'aaa_srcrpm'
+                }
+            ],
+            'bbb_srcrpm' : [
+                {
+                    'name' : 'bbb',
+                    'srcrpm' : 'bbb_srcrpm'
+                }
+            ]
+        }
+        result = LocalInstalledDataParse._list2dict(input_list, 'srcrpm')
+        self.assertDictEqual(result,expect_dict,"_list2dict test failed!")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
