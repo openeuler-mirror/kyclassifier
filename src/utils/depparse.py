@@ -19,6 +19,7 @@ import hawkey
 import dnf
 
 from .config import BaseConfig
+from src.log.logger import logger
 
 
 class DepParse(object):
@@ -176,10 +177,13 @@ class RepoDepParse(DepParse):
                     sslverify=0,
                 )
             base.fill_sack(load_system_repo=False)
-            print("Enabled repositories:")
+            enabled_repo={}
             for repo in base.repos.iter_enabled():
-                print("id: {}".format(repo.id))
-                print("baseurl: {}".format(repo.baseurl))
+                enabled_repo[repo.id] = repo.baseurl.__str__()
+            if enabled_repo:
+                #只有在enabled_repo有内容的时候才会进行打印
+                logger.info('Enabled repositories: {}'.format(enabled_repo))
+
             q = base.sack.query()
         for p in q.available():
             package_dep_d[p.name] = list(set(map(lambda x : '{}'.format(x.name),q.filter(provides=p.requires))))

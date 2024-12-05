@@ -20,8 +20,9 @@ rpmbuild -ba ~/rpmbuild/SPECS/kyclassifier.spec
 rpm -ivh ~/rpmbuild/RPMS/xxxx/kyclassifier-1.1-0.xxxx.rpm
 
 依赖安装：
-pip3 install pycdlib isoparser
 yum install python3-hawkey
+pip3 install pycdlib Jinja2 MarkupSafe
+
 
 #### 使用说明
 
@@ -30,12 +31,14 @@ usage: kyclassifier -h
                     -iso  ISO_FILE_PATH
                     -repo
                     -local
+                    -console_log
 
 optional arguments:
   -h, --help  show this help message and exit
   -iso ISO    Input ISO file path
   -repo       Whether to analyze repo packages.
   -local      Whether to analyze local installed packages.
+  -console_log  Output log to console.
   
 
 #### 参与贡献
