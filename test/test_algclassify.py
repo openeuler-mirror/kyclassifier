@@ -118,6 +118,15 @@ class TestAlgClassify(unittest.TestCase):
         self.assertIsInstance(result,dict,"_get_pkg2category_by_srcrpm test failed!")
         self.assertIn('category1',result.get('aaa-devel', []),"The category of package aaa-devel test failed!")
 
+    def test_get_pkg2category_by_rpmvendor(self):
+        """
+            Test class AlgClassify method _get_pkg2category_by_rpmvendor()
+        Returns:
+            dict
+        """
+        result = AlgClassify._get_pkg2category_by_rpmvendor(self.data_obj)
+        self.assertIsInstance(result,dict,"_get_pkg2category_by_rpmvendor test failed!")
+
     def test_get_pkg2category_by_jsonf(self):
         """
             Test class AlgClassify method _get_pkg2category_by_jsonf()

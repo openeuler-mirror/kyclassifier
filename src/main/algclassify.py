@@ -133,7 +133,7 @@ class AlgClassify(object):
         res = {}
         if not hasattr(data_obj,'os_vendor') or not data_obj.os_vendor:
             return res
-        pkgsinfo = pkgsinfo = data_obj.pkgs_info
+        pkgsinfo = data_obj.pkgs_info
         for p in pkgsinfo:
             rpm_vendor = p.get('rpm_vendor', '')
             if rpm_vendor != data_obj.os_vendor:
