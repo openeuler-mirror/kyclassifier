@@ -70,6 +70,7 @@ class kyClassifier(object):
         )
         formatted_time = util.get_formatted_time()
         dir_path = '/opt/kyclassifier/output/{}/'.format(formatted_time)
+        logfile_path = '/opt/kyclassifier/output/kyclassifier.log'
         json_path = '{}json/'.format(dir_path)
         html_path = '{}html/'.format(dir_path)
         os.makedirs(dir_path)
@@ -78,7 +79,7 @@ class kyClassifier(object):
         for tup in JSON_OUTPATH:
             with open(json_path + tup[1],'w') as f:
                 json.dump(tup[0],f)
-        print(("Output json file saved at {}").format(json_path))    
+        
         report_generator = ReportGenerator(
             os.path.join(json_path,'pkg2category.json'),
             os.path.join(json_path,'pkg2layer.json'),
@@ -86,7 +87,11 @@ class kyClassifier(object):
             html_path,
             'Report.html')
         report_generator.generate_result_file()
-        print(("Output html file saved at {}").format(html_path))  
+        
+        logger.info(("Output json file saved at {}").format(json_path))
+        logger.info(("Output html file saved at {}").format(html_path))
+        logger.info(("Output log file saved at {}").format(logfile_path))
+         
 
 
 if __name__ == '__main__':
@@ -101,11 +106,12 @@ if __name__ == '__main__':
     parser.add_argument('-iso', type=str, help='Input ISO file path')
     parser.add_argument('-repo', action = 'store_true', help='Whether to analyze repo packages.')
     parser.add_argument('-local', action = 'store_true', help='Whether to analyze local installed packages.')
-    parser.add_argument('-console_log', action = 'store_true', help='Output log to console.')
+    parser.add_argument('-console_log', action = 'store_true', default = True, help='Output log to console.')
     args = parser.parse_args()
 
     if len(sys.argv) == 1:
         parser.print_help()
+        sys.exit(0)
 
     if args.console_log:
         LOGGER.update_console_log(logger)

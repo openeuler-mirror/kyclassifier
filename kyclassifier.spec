@@ -7,7 +7,7 @@ Source0:        kyclassifier-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3
 
-Requires: python3 python3-dnf python3-hawkey python3-six python3-pycdlib 
+Requires: python3 python3-dnf python3-hawkey python3-six python3-pycdlib
 
 %description
 Use for analyzes layers and categories information of packages in openEuler.
