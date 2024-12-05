@@ -21,11 +21,13 @@ sys.path.append(parent_path)
 
 import unittest
 
+from test_algclassify import TestAlgClassify
+from test_alglayer import TestAlglayer
+from test_dataparse import TestDataParse
+from test_depparse import TestDepParse
+from test_isocheck import TestIsoCheck
 from test_repocheck import TestRepoCheck
 from test_util import TestUtil
-from test_dataparse import TestDataParse
-from test_dataparse import TestDataParse
-from test_isocheck import TestIsoCheck
 
 
 if __name__ == "__main__":

@@ -26,6 +26,28 @@ class DepObj(object):
         self.dep_by_dict = {'kexec-tools': ['anaconda'],'dbus-x11':['lightdm', 'tigervnc-server-minimal', 'ukui-power-manager', 'firewalld'],'libevdev-help':[]}
         self.all_pkgs = {'kexec-tools', 'dbus-x11', 'libevdev-help'}
 
+    def get_pkg_all_deps(self,pkg_name):
+        """
+            解析输入软件包的所有南向依赖软件包
+        Args:
+            pkg_name (string): 软件包名
+
+        Returns:
+            set: 南向依赖软件包集合
+        """
+        dep_set = set()
+        dep_pkgs_dict = self.dep_dict
+        to_process = {pkg_name}
+        while to_process:
+            package = to_process.pop()
+            dep_set.add(package)
+            for dep in dep_pkgs_dict.get(package,set()):
+                if dep not in dep_set:
+                    to_process.add(dep)
+                    dep_set.add(dep)
+        dep_set.remove(pkg_name)
+        return dep_set
+
 class TestAlglayer(unittest.TestCase):
     """
         alglayer模块单元测试
@@ -100,13 +122,13 @@ class TestAlglayer(unittest.TestCase):
         """
             Test class AlgLayer method get_unlayered_pkgs
         Returns:
-            dict()
+            list
         """
         if not self._init_alglayer():
             self.skipTest("Init AlgLayer failed, test skiped!")
         else:
             result = self.alglayer.get_unlayered_pkgs(self.alglayer.init_id2pkgs_dict,self.depobj.all_pkgs)
-            self.assertIsInstance(result, dict, "get_unlayered_pkgs test failed!")
+            self.assertIsInstance(result, list, "get_unlayered_pkgs test failed!")
     
     def test_get_layer_by_reqlayer(self):
         """
