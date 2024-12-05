@@ -35,12 +35,24 @@ class TestDataParse(unittest.TestCase):
 
     def _init_iso_dataparse(self):
         """
-            Try to init iso_depparse object
+            Try to init iso_dataparse object
         Returns:
             bool
         """
         try:
             self.iso_dataparse = ISODataParse(self.files_path)
+            return True
+        except:
+            return False
+        
+    def _init_local_dataparse(self):
+        """
+            Try to init local_dataprase object
+        Returns:
+            bool
+        """
+        try:
+            self.local_dataparse = LocalInstalledDataParse()
             return True
         except:
             return False
@@ -159,6 +171,17 @@ class TestDataParse(unittest.TestCase):
         result = LocalInstalledDataParse.get_pkgname_set()
         self.assertIsInstance(result,set,"get_pkgname_set test failed!")
 
+    def test_get_os_vendor(self):
+        """
+            Test class LocalInstalledDataParse method get_os_vendor()
+        Returns:
+            set
+        """
+        if not self._init_local_dataparse():
+            self.skipTest("Init local_dataparse failed, test skiped!")
+        else:
+            result = LocalInstalledDataParse.get_os_vendor(self.local_dataparse.pkgs_info)
+            self.assertIsInstance(result,str,"get_os_vendor test failed!")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
