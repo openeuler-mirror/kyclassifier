@@ -140,7 +140,21 @@ class TestAlgClassify(unittest.TestCase):
             self.assertIsInstance(result,dict,"_get_pkg2category_by_jsonf test failed!")
 
     def test_merge_pkg2category_dict(self):
-        pass
+        """
+            Test class AlgClassify method _merge_pkg2category_dict()
+        Returns:
+            dict
+        """
+        main_rpm_dict = {
+            'aaa' : ['category1']
+        }
+        devel_rpm_dict = {
+            'aaa' : ['category2']
+        }
+        result = AlgClassify._merge_pkg2category_dict(self.data_obj, main_rpm_dict, devel_rpm_dict)
+        self.assertIsInstance(result,dict,"_merge_pkg2category_dict test failed!")
+        self.assertEqual(result['aaa'], ['category1', 'category2'], "_merge_pkg2category_dict test failed!")
+        self.assertEqual(result['aaa-devel'], ['其它'], "_merge_pkg2category_dict test failed!")
 
     def test_run(self):
         pass
