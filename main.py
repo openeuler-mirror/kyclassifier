@@ -20,6 +20,7 @@ import argparse
 
 from src.utils.isocheck import IsoCheck
 from src.utils.repocheck import RepoCheck
+from src.utils.localcheck import LocalCheck
 from src.utils import dataparse
 from src.utils import depparse
 from src.utils import util
@@ -129,6 +130,8 @@ if __name__ == '__main__':
             sys.exit(1)
         kyClassifier.process_repo()   
     if args.local:
+        if not LocalCheck.check():
+            sys.exit(1)
         kyClassifier.process_local()
     if args.q_rpminiso:
         layer = QueryLayerInIso.run()

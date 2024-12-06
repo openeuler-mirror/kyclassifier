@@ -39,6 +39,11 @@ class BaseConfig():
         1001:"The RPM path does not exist. Please check if the entered RPM path is correct.",
     }
 
+    # localcheck
+    LOCAL_CHECK_ERROR_INFO = {
+        1001:'The current system has dependency missing packages. Please verify the packages requires'
+    }
+
     # util
     ISO_REPODATA_DIR = '/opt/kyclassifier/iso_parse/repodata'
 
