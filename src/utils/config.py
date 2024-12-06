@@ -37,6 +37,7 @@ class BaseConfig():
 
     RPM_CHECK_ERROR_INFO={
         1001:"The RPM path does not exist. Please check if the entered RPM path is correct.",
+        1002:"The compliance check for the RPM file failed. Please check if the RPM file is normal.",
     }
 
     # util
