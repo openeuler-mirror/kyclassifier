@@ -44,14 +44,49 @@ class LocalCheck(object):
                 pkgs_missreq_dict[p_name] = missreq_l
         
         return pkgs_missreq_dict
+    
+    @classmethod
+    def check_pkgsconflicts(cls):
+        """
+            获取本地已安装软件包中，依赖冲突的软件包
+        Returns:
+            pkgs_conflicts_dict: 软件包冲突字典
+        """
+        all_pkgs_dict = dict()
+        pkgs_conflicts_dict = dict()
+
+        sack = hawkey.Sack()
+        sack.load_system_repo(build_cache=False)
+        q = hawkey.Query(sack)
+
+        for p in q:
+            p_name = p.name
+            all_pkgs_dict[p_name] = []
+            for conflict in p.conflicts:
+                provider_query = hawkey.Query(sack).filter(provides=str(conflict))
+                if provider_query:
+                    for c in provider_query:
+                        all_pkgs_dict[p_name].append(c.name)
+
+        for k, v in all_pkgs_dict.items():
+            if v:
+                pkgs_conflicts_dict[k] = v
+        return pkgs_conflicts_dict
 
     @classmethod
     def check(cls):
         """
             本地检查入口函数
         """
+
+        # 本地软件包依赖缺失检查
         pkgs_missreq_dict = cls.check_pkgsmissreq()
         if pkgs_missreq_dict:
             print("{} : {}".format(BaseConfig.LOCAL_CHECK_ERROR_INFO.get(1001,''), str(pkgs_missreq_dict)))
+
+        # 本地软件包依赖冲突检查
+        pkgs_conflicts_dict = cls.check_pkgsconflicts()
+        if pkgs_conflicts_dict:
+            print("{} : {}".format(BaseConfig.LOCAL_CHECK_ERROR_INFO.get(1002,''), str(pkgs_conflicts_dict)))
         
         return True

@@ -42,7 +42,8 @@ class BaseConfig():
 
     # localcheck
     LOCAL_CHECK_ERROR_INFO = {
-        1001:'The current system has dependency missing packages. Please verify the packages requires'
+        1001:'The current system has dependency missing packages. Please verify the packages requires',
+        1002:'The current system has conflicts packages. Please verify the packages'
     }
 
     # util
