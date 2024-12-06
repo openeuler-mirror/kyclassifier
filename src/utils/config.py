@@ -35,6 +35,10 @@ class BaseConfig():
         1002:'The currently configured repository is not available. Please check that the repository configuration in the file /opt/kyclassifier/src/data/repos_data.json is correct.',
     }
 
+    RPM_CHECK_ERROR_INFO={
+        1001:"The RPM path does not exist. Please check if the entered RPM path is correct.",
+    }
+
     # util
     ISO_REPODATA_DIR = '/opt/kyclassifier/iso_parse/repodata'
 
