@@ -12,17 +12,12 @@
 # See the Mulan PSL v2 for more details.
 # **********************************************************************************
 """
-import os
-import sys
-current_path = os.path.dirname(__file__)
-parent_path = os.path.dirname(current_path)
-sys.path.append(parent_path)
 
-from rpmquery import RpmQuery
-from utils.util import ISOUtils
-from utils.depparse import ISODepParse
-from utils.config import BaseConfig
-from main.alglayer import AlgLayer
+from .rpmquery import RpmQuery
+from src.utils.util import ISOUtils
+from src.utils.depparse import ISODepParse
+from src.utils.config import BaseConfig
+from src.main.alglayer import AlgLayer
 
 
 class QueryLayerInIso(RpmQuery):

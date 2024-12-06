@@ -15,7 +15,7 @@
 
 import rpm
 
-from rpmhdrinfo import RpmHdrInfo
+from .rpmhdrinfo import RpmHdrInfo
 
 class RpmQuery(object):
     """

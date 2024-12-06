@@ -37,6 +37,15 @@ class TestRpmCheck(unittest.TestCase):
         """
         result = self.rpm_check.check_exist()
         self.assertIn(result, [True, False], "check_exist test failed!")
+    
+    def test_check_formate(self):
+        """
+            Test class method check_formate()
+        Returns:
+            bool
+        """
+        result = self.rpm_check.check_formate()
+        self.assertIn(result, [True, False], "check_formate test failed!")
 
 
 if __name__ == "__main__":
