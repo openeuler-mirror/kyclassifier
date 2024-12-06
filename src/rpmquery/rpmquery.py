@@ -15,6 +15,8 @@
 
 import rpm
 
+from rpmhdrinfo import RpmHdrInfo
+
 class RpmQuery(object):
     """
         rpm查询模块
@@ -35,13 +37,13 @@ class RpmQuery(object):
         """
         pass
 
-    def _get_rpminfo(self,rpmpath):
+    @classmethod
+    def get_rpminfo(cls,rpmpath):
         """
             获取rpminfo 
         """
         # Rpmcheck 
         ts = rpm.TransactionSet("/",rpm._RPMVSF_NOSIGNATURES)
         hdr = ts._f2hdr(rpmpath)
-        # process hdr data
-        rpminfo = {}
+        rpminfo = RpmHdrInfo(hdr)
         return rpminfo

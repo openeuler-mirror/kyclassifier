@@ -12,14 +12,25 @@
 # See the Mulan PSL v2 for more details.
 # **********************************************************************************
 """
+import os
+import sys
+current_path = os.path.dirname(__file__)
+parent_path = os.path.dirname(current_path)
+sys.path.append(parent_path)
 
 from rpmquery import RpmQuery
+from utils.util import ISOUtils
+from utils.depparse import ISODepParse
+from utils.config import BaseConfig
+from main.alglayer import AlgLayer
 
 
 class QueryLayerInIso(RpmQuery):
 
     def __init__(self,rpm,iso):
-        pass
+        self._rpm = rpm
+        self._iso = iso
+        self._get_isofiles()
 
     @classmethod
     def run(cls):
@@ -37,14 +48,19 @@ class QueryLayerInIso(RpmQuery):
         pass
 
     def _get_isopkgs_layer(self):
-        """获取isopkgs的分层结果
         """
-        pass
+            获取isopkgs的分层结果
+        Returns:
+            res (dict)  
+        """
+        isodepobj = ISODepParse(self._isofiles)
+        res = AlgLayer.run(isodepobj, BaseConfig.LAYERDATA)
+        return res
 
     def _get_isofiles(self):
         """获取iso元数据
         """
-        pass
+        self._isofiles = ISOUtils.parse_iso_repofile(self.iso)
 
     def _check(self):
         """检查输入rpm、iso文件
@@ -53,9 +69,9 @@ class QueryLayerInIso(RpmQuery):
 
     @property
     def rpm(self):
-        pass
+        return self._rpm
 
     @property
     def iso(self):
-        pass
+        return self._iso
 
