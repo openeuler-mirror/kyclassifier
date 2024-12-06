@@ -29,6 +29,7 @@ from src.main.alglayer import AlgLayer
 from src.main.algclassify import AlgClassify
 from src.log.logger import logger, LOGGER
 from src.report.report_generator import ReportGenerator
+from src.rpmquery.querylayeriniso import QueryLayerInIso
 
 
 class kyClassifier(object):
@@ -107,6 +108,8 @@ if __name__ == '__main__':
     parser.add_argument('-repo', action = 'store_true', help='Whether to analyze repo packages.')
     parser.add_argument('-local', action = 'store_true', help='Whether to analyze local installed packages.')
     parser.add_argument('-console_log', action = 'store_true', default = True, help='Output log to console.')
+    rpmquery = parser.add_argument_group('rpmquery')
+    rpmquery.add_argument('-q_rpminiso', type=str, help='Query input rpm layer in iso.')
     args = parser.parse_args()
 
     if len(sys.argv) == 1:
@@ -127,5 +130,8 @@ if __name__ == '__main__':
         kyClassifier.process_repo()   
     if args.local:
         kyClassifier.process_local()
+    if args.q_rpminiso:
+        layer = QueryLayerInIso.run()
+        logger.info("Rpm layer in iso is {}".format(layer))
 
     logger.info("Kyclassifier end!")

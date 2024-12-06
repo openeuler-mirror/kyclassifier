@@ -21,6 +21,11 @@ class QueryLayerInIso(RpmQuery):
     def __init__(self,rpm,iso):
         pass
 
+    @classmethod
+    def run(cls):
+        # return rpm layer in iso 
+        return ''
+
     def get_rpm_layer(self):
         """查询rpm层级
         """

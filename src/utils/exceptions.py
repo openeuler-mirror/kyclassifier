@@ -31,3 +31,12 @@ class ReportGenerateError(Exception):
  
     def __str__(self):
         return f"ReportGenerateError: {self.message}"
+
+class RpmCheckError(Exception):
+    """Rpm check exception
+    """
+    def __init__(self, message):
+        self.message = message
+ 
+    def __str__(self):
+        return f"RpmCheckError: {self.message}"
