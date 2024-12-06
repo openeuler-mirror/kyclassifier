@@ -13,22 +13,39 @@
 # See the Mulan PSL v2 for more details.
 # **********************************************************************************
 """
-import os
-import sys
-current_path = os.path.dirname(__file__)
-parent_path = os.path.dirname(current_path)
-sys.path.append(parent_path)
 
 import unittest
 
-from test_algclassify import TestAlgClassify
-from test_alglayer import TestAlglayer
-from test_dataparse import TestDataParse
-from test_depparse import TestDepParse
-from test_isocheck import TestIsoCheck
-from test_localcheck import TestLocalCheck
-from test_repocheck import TestRepoCheck
-from test_util import TestUtil
+from src.utils.localcheck import LocalCheck
+
+
+class TestLocalCheck(unittest.TestCase):
+
+    def setUp(self):
+        self.local_check = LocalCheck()
+
+    def tearDown(self):
+        """Clear test data
+        """
+        pass
+
+    def test_check_pkgsmissreq(self):
+        """Test class method check_pkgsmissreq()
+
+        Returns:
+            bool
+        """
+        result = self.local_check.check_pkgsmissreq()
+        self.assertIsInstance(result, dict, "check_pkgsmissreq test failed!")
+
+    def test_check(self):
+        """Test class method check()
+
+        Returns:
+            bool
+        """
+        result = self.local_check.check()
+        self.assertIn(result, [True, False], "check test failed!")
 
 
 if __name__ == "__main__":
