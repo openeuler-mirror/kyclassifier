@@ -21,7 +21,7 @@ rpm -ivh ~/rpmbuild/RPMS/xxxx/kyclassifier-1.1-0.xxxx.rpm
 
 依赖安装：
 yum install python3-hawkey
-pip3 install pycdlib Jinja2 MarkupSafe
+pip3 install pycdlib Jinja2 MarkupSafe psutil
 
 
 #### 使用说明

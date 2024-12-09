@@ -26,12 +26,12 @@ from src.utils import depparse
 from src.utils import util
 from src.utils.util import ISOUtils
 from src.utils.config import BaseConfig
+from src.utils.programcheck import find_processes_with_cmdline_keyword
 from src.main.alglayer import AlgLayer
 from src.main.algclassify import AlgClassify
 from src.log.logger import logger, LOGGER
 from src.report.report_generator import ReportGenerator
 from src.rpmquery.querylayeriniso import QueryLayerInIso
-
 
 class kyClassifier(object):
 
@@ -119,6 +119,9 @@ if __name__ == '__main__':
 
     if args.console_log:
         LOGGER.update_console_log(logger)
+    
+    #进程检查函数
+    find_processes_with_cmdline_keyword('kyclassifier')
 
     logger.info("Start run kyclassifier...")
     if args.iso:
