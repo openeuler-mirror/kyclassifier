@@ -13,11 +13,16 @@
 # **********************************************************************************
 """
 
+import hawkey
+
 from .rpmquery import RpmQuery
 from src.utils.util import ISOUtils
 from src.utils.depparse import ISODepParse
 from src.utils.config import BaseConfig
 from src.main.alglayer import AlgLayer
+from src.rpmquery.rpmcheck import RpmCheck
+from src.utils.isocheck import IsoCheck
+from src.log.logger import logger
 
 
 class QueryLayerInIso(RpmQuery):
@@ -28,19 +33,49 @@ class QueryLayerInIso(RpmQuery):
         self._get_isofiles()
 
     @classmethod
-    def run(cls):
-        # return rpm layer in iso 
-        return ''
+    def run(cls,args):
+        if not cls.check(args):
+            return -1
+        rpm = args[0]
+        iso = args[1]
+        obj = cls(rpm,iso)
+        layer = obj.get_rpm_layer()
+        logger.info("RPM file: {}\nISO file: {}\nRPM layer in ISO: {}".format(rpm,iso,layer))
+        return layer
 
     def get_rpm_layer(self):
-        """查询rpm层级
         """
-        pass
+            查询rpm层级
+        Returns:
+            int
+        """
+        layers = []
+        rpmdeps = self._get_rpmdeps()
+        isopkgs_layer = self._get_isopkgs_layer()
+        for p in rpmdeps:
+            l = isopkgs_layer.get(p,0)
+            layers.append(l)
+        return max(layers)
 
     def _get_rpmdeps(self):
-        """获取rpm包在iso中的南向依赖包
         """
-        pass
+            获取rpm包在iso中的南向依赖包
+        Returns:
+            list
+        """
+        rpminfo = RpmQuery.get_rpminfo(self.rpm)
+        sack = hawkey.Sack()
+        repo = hawkey.Repo("repo_parse")
+        repo.repomd_fn, repo.primary_fn,repo.filelists_fn = self._isofiles
+        sack.load_repo(repo,load_filelists=True)
+        q = hawkey.Query(sack)
+        req_l = []
+        req_objs = q.filter(provides=rpminfo.requires)
+        for req_obj in req_objs:
+            req_pkgname = req_obj.name
+            req_l.append(req_pkgname)
+        req_l = list(set(req_l))
+        return req_l
 
     def _get_isopkgs_layer(self):
         """
@@ -57,10 +92,19 @@ class QueryLayerInIso(RpmQuery):
         """
         self._isofiles = ISOUtils.parse_iso_repofile(self.iso)
 
-    def _check(self):
-        """检查输入rpm、iso文件
+    @classmethod
+    def check(cls,args):
         """
-        pass
+            检查输入rpm、iso文件
+        Returns:
+            bool
+        """
+        rpm = args[0]
+        iso = args[1]
+        if RpmCheck.check(rpm) and IsoCheck.check(iso):
+            return True
+        else:
+            return False
 
     @property
     def rpm(self):

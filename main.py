@@ -26,6 +26,7 @@ from src.utils import depparse
 from src.utils import util
 from src.utils.util import ISOUtils
 from src.utils.config import BaseConfig
+from src.utils.programcheck import find_processes_with_cmdline_keyword
 from src.main.alglayer import AlgLayer
 from src.main.algclassify import AlgClassify
 from src.log.logger import logger, LOGGER
@@ -89,7 +90,6 @@ class kyClassifier(object):
             html_path,
             'Report.html')
         report_generator.generate_result_file()
-        
         logger.info(("Output json file saved at {}").format(json_path))
         logger.info(("Output html file saved at {}").format(html_path))
         logger.info(("Output log file saved at {}").format(logfile_path))
@@ -101,7 +101,8 @@ if __name__ == '__main__':
                '                   -iso  ISO_FILE_PATH\n',
                '                   -repo\n',
                '                   -local\n',
-               '                   -console_log']
+               '                   -console_log\n',
+               '                   -q_rpminiso  RPM_FILE_PATH ISO_FILE_PATH']
 
     str_usage = 'kyclassifier ' + ' '.join(options)
     parser = argparse.ArgumentParser(usage=str_usage)
@@ -109,8 +110,7 @@ if __name__ == '__main__':
     parser.add_argument('-repo', action = 'store_true', help='Whether to analyze repo packages.')
     parser.add_argument('-local', action = 'store_true', help='Whether to analyze local installed packages.')
     parser.add_argument('-console_log', action = 'store_true', default = True, help='Output log to console.')
-    rpmquery = parser.add_argument_group('rpmquery')
-    rpmquery.add_argument('-q_rpminiso', type=str, help='Query input rpm layer in iso.')
+    parser.add_argument('-q_rpminiso', type=str, nargs=2, help='Query input rpm layer in iso.')
     args = parser.parse_args()
 
     if len(sys.argv) == 1:
@@ -119,6 +119,8 @@ if __name__ == '__main__':
 
     if args.console_log:
         LOGGER.update_console_log(logger)
+
+    find_processes_with_cmdline_keyword('kyclassifier')
 
     logger.info("Start run kyclassifier...")
     if args.iso:
@@ -134,7 +136,10 @@ if __name__ == '__main__':
             sys.exit(1)
         kyClassifier.process_local()
     if args.q_rpminiso:
-        layer = QueryLayerInIso.run()
-        logger.info("Rpm layer in iso is {}".format(layer))
+        layer = QueryLayerInIso.run(args.q_rpminiso)
+        if layer < 0:
+            logger.info("Check error,skipped query rpm layer in iso.")
+        else:
+            logger.info("Rpm layer in iso is {}".format(layer))
 
     logger.info("Kyclassifier end!")
