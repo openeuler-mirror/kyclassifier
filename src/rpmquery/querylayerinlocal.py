@@ -13,11 +13,14 @@
 # **********************************************************************************
 """
 
+import hawkey
 
 from .rpmquery import RpmQuery
 from src.utils.depparse import LocalInstalledDepParse
 from src.utils.config import BaseConfig
 from src.main.alglayer import AlgLayer
+from src.rpmquery.rpmcheck import RpmCheck
+from src.log.logger import logger
 
 
 class QueryLayerInLocal(RpmQuery):
@@ -25,15 +28,52 @@ class QueryLayerInLocal(RpmQuery):
     def __init__(self,rpm):
         self._rpm = rpm
 
-    def get_rpm_layer(self):
-        """查询rpm层级
+    @classmethod
+    def run(cls,args):
         """
-        pass
+            入口函数
+        Returns:
+            layer (int)
+        """
+        rpm = args[0]
+        if not cls.check(rpm):
+            return -1
+        obj = cls(rpm)
+        layer = obj.get_rpm_layer()
+        logger.info("RPM file: {}\nRPM layer in Local: {}".format(rpm,layer))
+        return layer
+
+    def get_rpm_layer(self):
+        """
+            查询rpm层级
+        Returns:
+            layer (int)
+        """
+        layers = []
+        rpmdeps = self._get_rpmdeps()
+        localpkgs_layer = self._get_localpkgs_layer()
+        for p in rpmdeps:
+            l = localpkgs_layer.get(p,0)
+            layers.append(l)
+        return max(layers)
 
     def _get_rpmdeps(self):
-        """获取rpm包在local环境中的南向依赖包
         """
-        pass
+            获取rpm包在local环境中的南向依赖包
+        Returns:
+            req_l (list)
+        """
+        rpminfo = RpmQuery.get_rpminfo(self.rpm)
+        sack = hawkey.Sack()
+        sack.load_system_repo(build_cache=False)
+        q = hawkey.Query(sack)
+        req_l = []
+        req_objs = q.filter(provides=rpminfo.requires)
+        for req_obj in req_objs:
+            req_pkgname = req_obj.name
+            req_l.append(req_pkgname)
+        req_l = list(set(req_l))
+        return req_l
 
     def _get_localpkgs_layer(self):
         """
@@ -45,10 +85,14 @@ class QueryLayerInLocal(RpmQuery):
         res = AlgLayer.run(localdepobj, BaseConfig.LAYERDATA)
         return res
 
-    def _check(self):
-        """检查输入rpm文件
+    @classmethod
+    def check(cls,rpm):
         """
-        pass
+            检查输入rpm文件
+        Returns:
+            bool
+        """
+        return RpmCheck.check(rpm)
 
     @property
     def rpm(self):
