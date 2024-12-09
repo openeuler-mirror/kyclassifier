@@ -38,10 +38,26 @@ class TestQueryLayerInIso(unittest.TestCase):
             return False
 
     def test_get_rpm_layer(self):
-        pass
+        """
+            Test class QueryLayerInIso method get_rpm_layer()
+        Returns:
+            int
+        """
+        if not self.isinit:
+            self.skipTest("QueryLayerInIso obj init failed,get_rpm_layer test skiped!")
+        result = self.obj.get_rpm_layer()
+        self.assertIsInstance(result,int,"get_rpm_layer test failed!")
 
     def test_get_rpmdeps(self):
-        pass
+        """
+            Test class QueryLayerInIso method _get_rpmdeps()
+        Returns:
+            list
+        """
+        if not self.isinit:
+            self.skipTest("QueryLayerInIso obj init failed,_get_rpmdeps test skiped!")
+        result = self.obj._get_rpmdeps()
+        self.assertIsInstance(result,list,"_get_rpmdeps test failed!")
 
     def test_get_isopkgs_layer(self):
         """
@@ -55,16 +71,43 @@ class TestQueryLayerInIso(unittest.TestCase):
         self.assertIsInstance(result,dict,"_get_isopkgs_layer test failed!")
     
     def test_get_isofiles(self):
-        pass
+        """
+            Test class QueryLayerInIso method _get_isofiles()
+        """
+        if not self.isinit:
+            self.skipTest("QueryLayerInIso obj init failed,_get_isofiles test skiped!")
+        self.obj._get_isofiles()
+        self.assertIsInstance(self.obj._isofiles,tuple,"_get_isofiles test failed!")
 
     def test_check(self):
-        pass
+        """
+            Test class QueryLayerInIso method check()
+        Returns:
+            bool
+        """
+        if not self.isinit:
+            self.skipTest("QueryLayerInIso obj init failed,check test skiped!")
+        args = [self._rpm,self._iso]
+        result = self.obj.check(args)
+        self.assertIn(result, [True, False], "check test failed!")
 
     def test_rpm(self):
-        pass
+        """
+            Test class QueryLayerInIso method rpm
+        """
+        if not self.isinit:
+            self.skipTest("QueryLayerInIso obj init failed,rpm test skiped!")
+        result = self.obj.rpm
+        self.assertIsInstance(result,str,"rpm test failed!")
 
     def test_iso(self):
-        pass
+        """
+            Test class QueryLayerInIso method iso
+        """
+        if not self.isinit:
+            self.skipTest("QueryLayerInIso obj init failed,iso test skiped!")
+        result = self.obj.iso
+        self.assertIsInstance(result,str,"iso test failed!")
 
 
 if __name__ == '__main__':
