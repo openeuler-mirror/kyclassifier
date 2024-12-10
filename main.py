@@ -141,7 +141,7 @@ if __name__ == '__main__':
     if args.q_rpminiso:
         layer = QueryLayerInIso.run(args.q_rpminiso)
         if layer < 0:
-            logger.info("Check error,skipped query rpm layer in iso.")
+            logger.error("Check error,skipped query rpm layer in iso.")
         else:
             logger.info("Rpm layer in iso is {}".format(layer))
     if args.q_rpminlocal:

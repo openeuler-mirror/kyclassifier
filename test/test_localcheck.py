@@ -38,6 +38,15 @@ class TestLocalCheck(unittest.TestCase):
         result = self.local_check.check_pkgsmissreq()
         self.assertIsInstance(result, dict, "check_pkgsmissreq test failed!")
 
+    def test_check_pkgsconflicts(self):
+        """Test class method check_pkgsconflicts()
+
+        Returns:
+            bool
+        """
+        result = self.local_check.check_pkgsconflicts()
+        self.assertIsInstance(result, dict, "check_pkgsconflicts test failed!")
+
     def test_check(self):
         """Test class method check()
 

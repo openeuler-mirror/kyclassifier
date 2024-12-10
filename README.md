@@ -32,6 +32,7 @@ usage: kyclassifier -h
                     -repo
                     -local
                     -console_log
+                    -q_rpminiso
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -39,6 +40,7 @@ optional arguments:
   -repo       Whether to analyze repo packages.
   -local      Whether to analyze local installed packages.
   -console_log  Output log to console.
+  -q_rpminiso   Query input rpm layer in iso
   
 
 #### 参与贡献
