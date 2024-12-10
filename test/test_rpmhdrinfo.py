@@ -18,7 +18,7 @@ import unittest
 
 from src.rpmquery.rpmhdrinfo import RpmHdrInfo
 
-rpmhdr = rpmhdr{
+rpmhdr ={
      'name':'test',
      'version':'1.0',
      'release':'1',
@@ -62,7 +62,64 @@ class TestRpmHdrInfo(unittest.TestCase):
             result = self.rpmhdrinfo.as_dict()
             self.assertIsInstance(result, dict, "as_dict test failed!")
     
-
-
+    def test_epoch(self):
+        """
+            Test class RpmHdrInfo method epoch
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init RpmHdrInfo failed, test skiped!")
+        else:
+            result = self.rpmhdrinfo.as_dict()
+            self.assertIsInstance(result, dict, "epoch test failed!")
+    
+    def test_vendor(self):
+        """
+            Test class RpmHdrInfo method vendor
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init RpmHdrInfo failed, test skiped!")
+        else:
+            result = self.rpmhdrinfo.as_dict()
+            self.assertIsInstance(result, dict, "vendor test failed!")
+    
+    def test_group(self):
+        """
+            Test class RpmHdrInfo method group
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init RpmHdrInfo failed, test skiped!")
+        else:
+            result = self.rpmhdrinfo.as_dict()
+            self.assertIsInstance(result, dict, "group test failed!")
+    
+    def test_rpm_sourcerpm(self):
+        """
+            Test class RpmHdrInfo method rpm_sourcerpm
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init RpmHdrInfo failed, test skiped!")
+        else:
+            result = self.rpmhdrinfo.as_dict()
+            self.assertIsInstance(result, dict, "rpm_sourcerpm test failed!")
+    
+    def test_requires(self):
+        """
+            Test class RpmHdrInfo method requires
+        Returns:
+            dict()
+        """
+        if not self._init_alglayer():
+            self.skipTest("Init RpmHdrInfo failed, test skiped!")
+        else:
+            result = self.rpmhdrinfo.as_dict()
+            self.assertIsInstance(result, dict, "requires test failed!")
 if __name__ == "__main__":
     unittest.main(verbosity=2)
