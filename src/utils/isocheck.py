@@ -40,17 +40,16 @@ class IsoCheck(object):
 
         ISO文件必须包含repodata目录
         """
+        if not os.path.isfile(self.path):
+            return False
         iso = pycdlib.PyCdlib()
         try:
             check_result = False
             iso.open(self.path)
-
             entry = iso.get_entry(iso_path='/repodata')
             if entry.is_dir():
                 check_result = True
-
             iso.close()
-
             return check_result
         except (ISOCheckError, pycdlib.pycdlibexception.PyCdlibException, struct.error) as e:
             print("Error checking ISO: {}".format(str(e)))

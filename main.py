@@ -32,6 +32,7 @@ from src.main.algclassify import AlgClassify
 from src.log.logger import logger, LOGGER
 from src.report.report_generator import ReportGenerator
 from src.rpmquery.querylayeriniso import QueryLayerInIso
+from src.rpmquery.querylayerinlocal import QueryLayerInLocal
 
 class kyClassifier(object):
 
@@ -101,7 +102,8 @@ if __name__ == '__main__':
                '                   -repo\n',
                '                   -local\n',
                '                   -console_log\n',
-               '                   -q_rpminiso  RPM_FILE_PATH ISO_FILE_PATH']
+               '                   -q_rpminiso  RPM_FILE_PATH ISO_FILE_PATH\n',
+               '                   -q_rpminlocal  RPM_FILE_PATH']
 
     str_usage = 'kyclassifier ' + ' '.join(options)
     parser = argparse.ArgumentParser(usage=str_usage)
@@ -110,6 +112,7 @@ if __name__ == '__main__':
     parser.add_argument('-local', action = 'store_true', help='Whether to analyze local installed packages.')
     parser.add_argument('-console_log', action = 'store_true', default = True, help='Output log to console.')
     parser.add_argument('-q_rpminiso', type=str, nargs=2, help='Query input rpm layer in iso.')
+    parser.add_argument('-q_rpminlocal', type=str, nargs=1, help='Query input rpm layer in local.')
     args = parser.parse_args()
 
     if len(sys.argv) == 1:
@@ -120,8 +123,6 @@ if __name__ == '__main__':
         LOGGER.update_console_log(logger)
     
     #进程检查函数
-    find_processes_with_cmdline_keyword('kyclassifier')
-
     find_processes_with_cmdline_keyword('kyclassifier')
 
     logger.info("Start run kyclassifier...")
@@ -143,5 +144,11 @@ if __name__ == '__main__':
             logger.info("Check error,skipped query rpm layer in iso.")
         else:
             logger.info("Rpm layer in iso is {}".format(layer))
+    if args.q_rpminlocal:
+        layer = QueryLayerInLocal.run(args.q_rpminlocal)
+        if layer < 0:
+            logger.info("Check error,skipped query rpm layer in local.")
+        else:
+            logger.info("Rpm layer in local is {}".format(layer))
 
     logger.info("Kyclassifier end!")
