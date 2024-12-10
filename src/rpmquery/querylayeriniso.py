@@ -30,7 +30,7 @@ class QueryLayerInIso(RpmQuery):
     def __init__(self,rpm,iso):
         self._rpm = rpm
         self._iso = iso
-        self._get_isofiles()
+        self._isofiles = ISOUtils.parse_iso_repofile(self.iso)
 
     @classmethod
     def run(cls,args):
@@ -69,13 +69,9 @@ class QueryLayerInIso(RpmQuery):
         repo.repomd_fn, repo.primary_fn,repo.filelists_fn = self._isofiles
         sack.load_repo(repo,load_filelists=True)
         q = hawkey.Query(sack)
-        req_l = []
         req_objs = q.filter(provides=rpminfo.requires)
-        for req_obj in req_objs:
-            req_pkgname = req_obj.name
-            req_l.append(req_pkgname)
-        req_l = list(set(req_l))
-        return req_l
+        req_l = {req_obj.name for req_obj in req_objs}
+        return list(req_l)
 
     def _get_isopkgs_layer(self):
         """
@@ -84,13 +80,7 @@ class QueryLayerInIso(RpmQuery):
             res (dict)  
         """
         isodepobj = ISODepParse(self._isofiles)
-        res = AlgLayer.run(isodepobj, BaseConfig.LAYERDATA)
-        return res
-
-    def _get_isofiles(self):
-        """获取iso元数据
-        """
-        self._isofiles = ISOUtils.parse_iso_repofile(self.iso)
+        return AlgLayer.run(isodepobj, BaseConfig.LAYERDATA)
 
     @classmethod
     def check(cls,args):
@@ -103,8 +93,7 @@ class QueryLayerInIso(RpmQuery):
         iso = args[1]
         if RpmCheck.check(rpm) and IsoCheck.check(iso):
             return True
-        else:
-            return False
+        return False
 
     @property
     def rpm(self):

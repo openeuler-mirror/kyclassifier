@@ -67,13 +67,9 @@ class QueryLayerInLocal(RpmQuery):
         sack = hawkey.Sack()
         sack.load_system_repo(build_cache=False)
         q = hawkey.Query(sack)
-        req_l = []
         req_objs = q.filter(provides=rpminfo.requires)
-        for req_obj in req_objs:
-            req_pkgname = req_obj.name
-            req_l.append(req_pkgname)
-        req_l = list(set(req_l))
-        return req_l
+        req_l = {req_obj.name for req_obj in req_objs}
+        return list(req_l)
 
     def _get_localpkgs_layer(self):
         """
@@ -82,8 +78,7 @@ class QueryLayerInLocal(RpmQuery):
             res (dict)  
         """
         localdepobj = LocalInstalledDepParse()
-        res = AlgLayer.run(localdepobj, BaseConfig.LAYERDATA)
-        return res
+        return AlgLayer.run(localdepobj, BaseConfig.LAYERDATA)
 
     @classmethod
     def check(cls,rpm):
