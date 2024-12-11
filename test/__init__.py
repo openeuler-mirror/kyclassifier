@@ -29,6 +29,7 @@ from test_isocheck import TestIsoCheck
 from test_localcheck import TestLocalCheck
 from test_repocheck import TestRepoCheck
 from test_util import TestUtil
+from test_querylayerinlocal import TestQueryLayerInLocal
 
 
 if __name__ == "__main__":
