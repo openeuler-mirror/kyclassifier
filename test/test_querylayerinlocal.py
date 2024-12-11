@@ -13,7 +13,7 @@
 # See the Mulan PSL v2 for more details.
 # **********************************************************************************
 """
-
+import os
 import unittest
 
 from src.rpmquery.querylayerinlocal import QueryLayerInLocal
@@ -22,48 +22,44 @@ class TestQueryLayerInLocal(unittest.TestCase):
 
     def setUp(self):
         self._rpm = '/opt/kyclassifier/test.rpm'
-        self.isinit = True if self._init_querylayeriniso() else False
+        self.isinit = True if self._init_querylayerinlocal() else False
         
-    def _init_querylayeriniso(self):
+    def _init_querylayerinlocal(self):
         """
             Try to init querylayerinlocal object
         Returns:
             bool
         """
         try:
-            self.obj = QueryLayerInLocal(self._rpm,self._rpm)
+            self.obj = QueryLayerInLocal(self._rpm)
             return True
         except:
             return False
+    
+    def test_run(self):
+        if os.path.exists(self._rpm) is False:
+            self.skipTest("Test File not exists, test_check skiped!")
+        result = QueryLayerInLocal.run([self.obj.rpm])
+        self.assertIsInstance(result, int, "Test QueryLayerInLocal.run failed!")
+
 
     def test_get_rpm_layer(self):
-        pass
-
-    def test_get_rpmdeps(self):
-        pass
-
-    def test_get_localpkgs_layer(self):
-        """
-            Test class QueryLayerInLocal method _get_localpkgs_layer()
-        Returns:
-            dict
-        """
-        if not self.isinit:
-            self.skipTest("QueryLayerInIso obj init failed,_get_localpkgs_layer test skiped!")
-        result = self.obj._get_localpkgs_laye()
-        self.assertIsInstance(result,dict,"_get_localpkgs_layer test failed!")
-    
-    def test_get_isofiles(self):
-        pass
+        if self.isinit is False:
+            self.skipTest("Test initialize for QueryLayerInLocal unfinished, test_get_rpm_layer skiped!")
+        layer = self.obj.get_rpm_layer()
+        self.assertIsInstance(layer,int,"QueryLayerInLocal.get_rpm_layer check failed!")
+        
 
     def test_check(self):
-        pass
+        if os.path.exists(self._rpm) is False:
+            self.skipTest("Test File not exists, test_check skiped!")
+        result = QueryLayerInLocal.check(self.obj.rpm)
+        self.assertIsInstance(result,bool,"Test QueryLayerInLocal.check failed!")
+
 
     def test_rpm(self):
         pass
 
-    def test_iso(self):
-        pass
 
 
 if __name__ == '__main__':
