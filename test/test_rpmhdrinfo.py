@@ -58,9 +58,8 @@ class TestRpmHdrInfo(unittest.TestCase):
         """
         if not self._init_alglayer():
             self.skipTest("Init RpmHdrInfo failed, test skiped!")
-        else:
-            result = self.rpmhdrinfo.as_dict()
-            self.assertIsInstance(result, dict, "as_dict test failed!")
+        result = self.rpmhdrinfo.as_dict()
+        self.assertIsInstance(result, dict, "as_dict test failed!")
     
     def test_epoch(self):
         """
@@ -70,9 +69,8 @@ class TestRpmHdrInfo(unittest.TestCase):
         """
         if not self._init_alglayer():
             self.skipTest("Init RpmHdrInfo failed, test skiped!")
-        else:
-            result = self.rpmhdrinfo.as_dict()
-            self.assertIsInstance(result, dict, "epoch test failed!")
+        result = self.rpmhdrinfo.as_dict()
+        self.assertIsInstance(result, dict, "epoch test failed!")
     
     def test_vendor(self):
         """
@@ -82,9 +80,8 @@ class TestRpmHdrInfo(unittest.TestCase):
         """
         if not self._init_alglayer():
             self.skipTest("Init RpmHdrInfo failed, test skiped!")
-        else:
-            result = self.rpmhdrinfo.as_dict()
-            self.assertIsInstance(result, dict, "vendor test failed!")
+        result = self.rpmhdrinfo.as_dict()
+        self.assertIsInstance(result, dict, "vendor test failed!")
     
     def test_group(self):
         """
@@ -94,9 +91,8 @@ class TestRpmHdrInfo(unittest.TestCase):
         """
         if not self._init_alglayer():
             self.skipTest("Init RpmHdrInfo failed, test skiped!")
-        else:
-            result = self.rpmhdrinfo.as_dict()
-            self.assertIsInstance(result, dict, "group test failed!")
+        result = self.rpmhdrinfo.as_dict()
+        self.assertIsInstance(result, dict, "group test failed!")
     
     def test_rpm_sourcerpm(self):
         """
@@ -106,9 +102,8 @@ class TestRpmHdrInfo(unittest.TestCase):
         """
         if not self._init_alglayer():
             self.skipTest("Init RpmHdrInfo failed, test skiped!")
-        else:
-            result = self.rpmhdrinfo.as_dict()
-            self.assertIsInstance(result, dict, "rpm_sourcerpm test failed!")
+        result = self.rpmhdrinfo.as_dict()
+        self.assertIsInstance(result, dict, "rpm_sourcerpm test failed!")
     
     def test_requires(self):
         """
@@ -118,8 +113,7 @@ class TestRpmHdrInfo(unittest.TestCase):
         """
         if not self._init_alglayer():
             self.skipTest("Init RpmHdrInfo failed, test skiped!")
-        else:
-            result = self.rpmhdrinfo.as_dict()
-            self.assertIsInstance(result, dict, "requires test failed!")
+        result = self.rpmhdrinfo.as_dict()
+        self.assertIsInstance(result, dict, "requires test failed!")
 if __name__ == "__main__":
     unittest.main(verbosity=2)

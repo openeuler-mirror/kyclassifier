@@ -65,9 +65,8 @@ class TestDataParse(unittest.TestCase):
         """
         if not self._init_iso_dataparse():
             self.skipTest("Init iso_dataparse failed, test skiped!")
-        else:
-            result = self.iso_dataparse.get_pkgname_set(self.files_path)
-            self.assertIsInstance(result, set, "get_pkgname_set test failed!")
+        result = self.iso_dataparse.get_pkgname_set(self.files_path)
+        self.assertIsInstance(result, set, "get_pkgname_set test failed!")
 
     def test_iso_get_pkgsinfo_list(self):
         """
@@ -77,9 +76,8 @@ class TestDataParse(unittest.TestCase):
         """
         if not self._init_iso_dataparse():
             self.skipTest("Init iso_dataparse failed, test skiped!")
-        else:
-            result = self.iso_dataparse.get_pkgsinfo_list(self.files_path)
-            self.assertIsInstance(result, list, "get_pkgsinfo_list test failed!")
+        result = self.iso_dataparse.get_pkgsinfo_list(self.files_path)
+        self.assertIsInstance(result, list, "get_pkgsinfo_list test failed!")
 
     def test_iso_get_pkginfo_byname(self):
         """
@@ -91,10 +89,9 @@ class TestDataParse(unittest.TestCase):
         """
         if not self._init_iso_dataparse():
             self.skipTest("Init iso_dataparse failed, test skiped!")
-        else:
-            pkgname = 'kernel'
-            result = self.iso_dataparse.get_pkginfo_byname(pkgname)
-            self.assertIsInstance(result, list, "get_pkginfo_byname test failed!")
+        pkgname = 'kernel'
+        result = self.iso_dataparse.get_pkginfo_byname(pkgname)
+        self.assertIsInstance(result, list, "get_pkginfo_byname test failed!")
     
     def test__list2dict(self):
         """
@@ -119,9 +116,8 @@ class TestDataParse(unittest.TestCase):
         """
         if not RepoCheck.check():
             self.skipTest("Repo check failed, test skiped!")
-        else:
-            result = RepoDataParse._load_data()
-            self.assertIsInstance(result,list,"_load_data test failed!")
+        result = RepoDataParse._load_data()
+        self.assertIsInstance(result,list,"_load_data test failed!")
             
     def test_repo_get_pkgname_set(self):
         """
@@ -131,9 +127,8 @@ class TestDataParse(unittest.TestCase):
         """
         if not RepoCheck.check():
             self.skipTest("Repo check failed, test skiped!")
-        else:
-            result = RepoDataParse.get_pkgname_set()
-            self.assertIsInstance(result,set,"get_pkgname_set test failed!")
+        result = RepoDataParse.get_pkgname_set()
+        self.assertIsInstance(result,set,"get_pkgname_set test failed!")
 
     def test_repo_get_pkgsinfo_list(self):
         """
@@ -143,9 +138,8 @@ class TestDataParse(unittest.TestCase):
         """
         if not RepoCheck.check():
             self.skipTest("Repo check failed, test skiped!")
-        else:
-            result = RepoDataParse.get_pkgsinfo_list()
-            self.assertIsInstance(result,list,"get_pkgsinfo_list test failed!")
+        result = RepoDataParse.get_pkgsinfo_list()
+        self.assertIsInstance(result,list,"get_pkgsinfo_list test failed!")
 
     def test_repo_list2dict(self):
         """
@@ -155,12 +149,11 @@ class TestDataParse(unittest.TestCase):
         """
         if not RepoCheck.check():
             self.skipTest("Repo check failed, test skiped!")
-        else:
-            dict_list = [{'pkgname':'aaa'},
-                         {'pkgname':'bbb'}]
-            key = 'pkgname'
-            result = RepoDataParse._list2dict(dict_list,key)
-            self.assertIsInstance(result,dict,"_list2dict test failed!")
+        dict_list = [{'pkgname':'aaa'},
+                     {'pkgname':'bbb'}]
+        key = 'pkgname'
+        result = RepoDataParse._list2dict(dict_list,key)
+        self.assertIsInstance(result,dict,"_list2dict test failed!")
 
     def test_local_get_pkgname_set(self):
         """
@@ -188,9 +181,8 @@ class TestDataParse(unittest.TestCase):
         """
         if not self._init_local_dataparse():
             self.skipTest("Init local_dataparse failed, test skiped!")
-        else:
-            result = LocalInstalledDataParse.get_os_vendor(self.local_dataparse.pkgs_info)
-            self.assertIsInstance(result,str,"get_os_vendor test failed!")
+        result = LocalInstalledDataParse.get_os_vendor(self.local_dataparse.pkgs_info)
+        self.assertIsInstance(result,str,"get_os_vendor test failed!")
 
     def test_local_list2dict(self):
         """

@@ -9,38 +9,38 @@
 
 #### 安装教程
 
-工具安装：
-git clone https://gitee.com/openeuler/kyclassifier
-mv kyclassifier kyclassifier-1.1
-tar -czvf kyclassifier-1.1.tar.gz kyclassifier-1.1
-mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-mv kyclassifier-1.1.tar.gz ~/rpmbuild/SOURCES
-cp kyclassifier-1.1/kyclassifier.spec ~/rpmbuild/SPECS
-rpmbuild -ba ~/rpmbuild/SPECS/kyclassifier.spec
-rpm -ivh ~/rpmbuild/RPMS/xxxx/kyclassifier-1.1-0.xxxx.rpm
+工具安装：<br>
+git clone https://gitee.com/openeuler/kyclassifier<br>
+mv kyclassifier kyclassifier-1.1<br>
+tar -czvf kyclassifier-1.1.tar.gz kyclassifier-1.1<br>
+mkdir -p ~/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}<br>
+mv kyclassifier-1.1.tar.gz ~/rpmbuild/SOURCES<br>
+cp kyclassifier-1.1/kyclassifier.spec ~/rpmbuild/SPECS<br>
+rpmbuild -ba ~/rpmbuild/SPECS/kyclassifier.spec<br>
+rpm -ivh ~/rpmbuild/RPMS/xxxx/kyclassifier-1.1-0.xxxx.rpm<br>
 
-依赖安装：
-yum install python3-hawkey
-pip3 install pycdlib Jinja2 MarkupSafe psutil
+依赖安装：<br>
+yum install python3-hawkey<br>
+pip3 install pycdlib Jinja2 MarkupSafe psutil<br>
 
 
 #### 使用说明
 
-kyclassifier -h 
-usage: kyclassifier -h
-                    -iso  ISO_FILE_PATH
-                    -repo
-                    -local
-                    -console_log
-                    -q_rpminiso
+kyclassifier -h<br> 
+usage: kyclassifier -h<br>
+                    -iso  ISO_FILE_PATH<br>
+                    -repo<br>
+                    -local<br>
+                    -console_log<br>
+                    -q_rpminiso<br>
 
-optional arguments:
-  -h, --help  show this help message and exit
-  -iso ISO    Input ISO file path
-  -repo       Whether to analyze repo packages.
-  -local      Whether to analyze local installed packages.
-  -console_log  Output log to console.
-  -q_rpminiso   Query input rpm layer in iso
+optional arguments:<br>
+  -h, --help  show this help message and exit<br>
+  -iso ISO    Input ISO file path<br>
+  -repo       Whether to analyze repo packages.<br>
+  -local      Whether to analyze local installed packages.<br>
+  -console_log  Output log to console.<br>
+  -q_rpminiso   Query input rpm layer in iso<br>
   
 
 #### 参与贡献

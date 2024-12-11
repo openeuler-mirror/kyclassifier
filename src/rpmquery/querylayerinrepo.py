@@ -14,12 +14,14 @@
 """
 
 from .rpmquery import RpmQuery
-
+from src.main.alglayer import AlgLayer
+from src.utils.depparse import RepoDepParse
+from src.utils.config import BaseConfig
 
 class QueryLayerInRepo(RpmQuery):
     
     def __init__(self,rpm):
-        pass
+        self._rpm = rpm
 
     def run(self):
         """入口函数
@@ -39,13 +41,25 @@ class QueryLayerInRepo(RpmQuery):
     def _get_repopkgs_layer(self):
         """获取repopkgs的分层结果
         """
-        pass
+        dep_obj = RepoDepParse()
+        init_f = BaseConfig.LAYERDATA 
+        return AlgLayer.run(dep_obj, init_f)
 
+
+    
+    @classmethod
     def check(self):
         """检查输入rpm以及配置的repo
+        Returns:
+            bool
         """
-        pass
+        rpm = args[0]
+        iso = args[1]
+        if RpmCheck.check(rpm) and RepoCheck.check():
+            return True
+        return False
+
 
     @property
     def rpm(self):
-        pass
+        return self._rpm

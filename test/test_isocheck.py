@@ -48,11 +48,10 @@ class TestIsoCheck(unittest.TestCase):
         Returns:
             bool
         """
-        if self.iso_check.check_exist():
-            result = self.iso_check.check_format()
-            self.assertIn(result, [True, False], "check_format test failed!")
-        else:
+        if not self.iso_check.check_exist():
             self.skipTest("iso file not exist,skip test check_format")
+        result = self.iso_check.check_format()
+        self.assertIn(result, [True, False], "check_format test failed!")
         
 
 if __name__ == "__main__":

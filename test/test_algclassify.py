@@ -69,9 +69,8 @@ class TestAlgClassify(unittest.TestCase):
         """
         if not os.path.exists(self.data_f):
             self.skipTest("Test File not exists, test skiped!")
-        else:
-            result = AlgClassify._load_data(self.data_f)
-            self.assertIsInstance(result,dict,"_load_data test failed!")
+        result = AlgClassify._load_data(self.data_f)
+        self.assertIsInstance(result,dict,"_load_data test failed!")
 
     def test_get_pkgs(self):
         """
@@ -135,9 +134,8 @@ class TestAlgClassify(unittest.TestCase):
         """
         if not os.path.exists(self.data_f):
             self.skipTest("Test File not exists, test skiped!")
-        else:
-            result = AlgClassify._get_pkg2category_by_jsonf(self.data_f)
-            self.assertIsInstance(result,dict,"_get_pkg2category_by_jsonf test failed!")
+        result = AlgClassify._get_pkg2category_by_jsonf(self.data_f)
+        self.assertIsInstance(result,dict,"_get_pkg2category_by_jsonf test failed!")
 
     def test_merge_pkg2category_dict(self):
         """
@@ -164,9 +162,8 @@ class TestAlgClassify(unittest.TestCase):
         """
         if not os.path.exists(self.data_f):
             self.skipTest("Test File not exists, test skiped!")
-        else:
-            result = AlgClassify.run(self.data_obj,self.data_f)
-            self.assertIsInstance(result,dict,"run test failed!")
+        result = AlgClassify.run(self.data_obj,self.data_f)
+        self.assertIsInstance(result,dict,"run test failed!")
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
