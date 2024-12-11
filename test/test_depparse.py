@@ -53,15 +53,14 @@ class TestDepParse(unittest.TestCase):
         Returns:
             dict
         """
-        if self.is_exists:
-            if not self._init_iso_depparse():
-                self.skipTest("Init iso_depparse failed, test skiped!")
-            else:
-                result = self.iso_depparse._get_repo_pkg_deps()
-                self.assertIsInstance(result,dict,"iso_depparse._get_repo_pkg_deps test failed!")
-        else:
+        if not self.is_exists:
             self.skipTest("_get_repo_pkg_deps test skiped!")
-    
+        if not self._init_iso_depparse():
+            self.skipTest("Init iso_depparse failed, test skiped!")
+        result = self.iso_depparse._get_repo_pkg_deps()
+        self.assertIsInstance(result,dict,"iso_depparse._get_repo_pkg_deps test failed!")
+   
+
     def test_iso_get_repo_pkg_deps_by(self):
         """
             Test class ISODepParse method _get_repo_pkg_deps_by()
@@ -70,9 +69,8 @@ class TestDepParse(unittest.TestCase):
         """
         if not self._init_iso_depparse():
             self.skipTest("Init iso_depparse failed, test skiped!")
-        else:
-            result = self.iso_depparse._get_repo_pkg_deps_by()
-            self.assertIsInstance(result,dict,"iso_depparse._get_repo_pkg_deps_by test failed!")
+        result = self.iso_depparse._get_repo_pkg_deps_by()
+        self.assertIsInstance(result,dict,"iso_depparse._get_repo_pkg_deps_by test failed!")
     
     def test_iso_get_all_pkgs(self):
         """
@@ -80,14 +78,12 @@ class TestDepParse(unittest.TestCase):
         Returns:
             set
         """
-        if self.is_exists:
-            if not self._init_iso_depparse():
-                self.skipTest("Init iso_depparse failed, test skiped!")
-            else:
-                result = self.iso_depparse._get_all_pkgs()
-                self.assertIsInstance(result,set,"iso_depparse._get_all_pkgs test failed!")
-        else:
+        if not self.is_exists:
             self.skipTest("_get_all_pkgs test skiped!")
+        if not self._init_iso_depparse():
+            self.skipTest("Init iso_depparse failed, test skiped!")
+        result = self.iso_depparse._get_all_pkgs()
+        self.assertIsInstance(result,set,"iso_depparse._get_all_pkgs test failed!")
     
     def _init_repo_depparse(self):
         """
@@ -107,15 +103,14 @@ class TestDepParse(unittest.TestCase):
         Returns:
             list
         """
-        if self.is_exists:
-            if not RepoCheck:
-                self.skipTest("Repo check failed, test skiped!")
-            if not self._init_repo_depparse():
-                self.skipTest("RepoDepParse obj init failed, test skiped!")
-            result = self.repo_depparse._load_data()
-            self.assertIsInstance(result,list,"repo_depparse._load_data test failed!")
-        else:
+        if not self.is_exists:
             self.skipTest("_load_data test skiped!")
+        if not RepoCheck:
+            self.skipTest("Repo check failed, test skiped!")
+        if not self._init_repo_depparse():
+            self.skipTest("RepoDepParse obj init failed, test skiped!")
+        result = self.repo_depparse._load_data()
+        self.assertIsInstance(result,list,"repo_depparse._load_data test failed!")
 
     def test_repo_get_all_pkgs(self):
         """

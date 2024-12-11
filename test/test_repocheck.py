@@ -72,11 +72,10 @@ class TestRepoCheck(unittest.TestCase):
             "baseurl": "http://url/path/updates/arch"
             }
         ]
-        if os.path.exists(self.repo_path):
-            result = self.repo_check._create_repofile(repos_l)
-            self.assertIn(result, [True, False], "_create_repofile test failed!")
-        else:
+        if not os.path.exists(self.repo_path):
             self.skipTest("_create_repofile test skiped!")
+        result = self.repo_check._create_repofile(repos_l)
+        self.assertIn(result, [True, False], "_create_repofile test failed!")
 
 
     def test_move_repofiles(self):

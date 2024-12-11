@@ -57,30 +57,27 @@ class TestUtil(unittest.TestCase):
         """Test static method parse_iso_repodata(iso_path,repodata_dir='/opt/kyclassifier/iso_parse/repodata')
         """
         repodata_dir='/opt/kyclassifier/iso_parse/repodata'
-        if os.path.exists(self.iso_path):
-            self.iso_utils.parse_iso_repodata(self.iso_path)
-            self.assertTrue(os.path.exists(repodata_dir), "parse_iso_repodata test failed!")
-        else:
+        if not os.path.exists(self.iso_path):
             self.skipTest("trans_set2list test skiped!")
+        self.iso_utils.parse_iso_repodata(self.iso_path)
+        self.assertTrue(os.path.exists(repodata_dir), "parse_iso_repodata test failed!")
 
     def test_get_repo_from_dir(self):
         """Test static method get_repo_from_dir(repodata_dir='/opt/kyclassifier/iso_parse/repodata')
         """
         repodata_dir='/opt/kyclassifier/iso_parse/repodata'
-        if os.path.exists(repodata_dir):
-            repomd_fn, primary_fn, filelists_fn = self.iso_utils.get_repo_from_dir(repodata_dir)
-            result = all(['repomd.xml' in repomd_fn, 'primary.xml' in primary_fn, 'filelists.xml' in filelists_fn])
-            self.assertTrue(result, "get_repo_from_dir test failed!")
-        else:
+        if not os.path.exists(repodata_dir):
             self.skipTest("get_repo_from_dir test skiped!")
+        repomd_fn, primary_fn, filelists_fn = self.iso_utils.get_repo_from_dir(repodata_dir)
+        result = all(['repomd.xml' in repomd_fn, 'primary.xml' in primary_fn, 'filelists.xml' in filelists_fn])
+        self.assertTrue(result, "get_repo_from_dir test failed!")
 
     def test_parase_iso_repofile(self):
         """Test class method parase_iso_repofile(iso_path,target_dir='/opt/kyclassifier/iso_parse/repodata')
         """
         target_dir='/opt/kyclassifier/iso_parse/repodata'
-        if os.path.exists(target_dir) and os.path.exists(self.iso_path):
-            repomd_fn, primary_fn, filelists_fn = self.iso_utils.parase_iso_repofile(self.iso_path)
-            result = all(['repomd.xml' in repomd_fn, 'primary.xml' in primary_fn, 'filelists.xml' in filelists_fn])
-            self.assertTrue(result, "parase_iso_repofile test failed!")
-        else:
+        if not os.path.exists(target_dir) or not os.path.exists(self.iso_path):
             self.skipTest("parase_iso_repofile test skiped!")
+        repomd_fn, primary_fn, filelists_fn = self.iso_utils.parase_iso_repofile(self.iso_path)
+        result = all(['repomd.xml' in repomd_fn, 'primary.xml' in primary_fn, 'filelists.xml' in filelists_fn])
+        self.assertTrue(result, "parase_iso_repofile test failed!")
