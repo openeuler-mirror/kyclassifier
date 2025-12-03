@@ -30,7 +30,7 @@ class RpmHdrInfo():
         self.url = rpmhdr['url']
 
     def __repr__(self):
-        return f"<RpmHdrInfo({self.name}-{self.version}-{self.release}.{self.arch})>"
+        return "<RpmHdrInfo({self.name}-{self.version}-{self.release}.{self.arch})>"
 
     def as_dict(self):
         """类属性字段转换为字典
