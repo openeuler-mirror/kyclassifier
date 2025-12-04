@@ -38,11 +38,11 @@ class RpmCheck(object):
             
             # 检查命令是否成功执行
             if result.returncode != 0:
-                print(f"Error querying RPM file {self.path}: {result.stderr}")
+                print("Error querying RPM file {self.path}: {result.stderr}")
                 return False
             return True
         except Exception as e:
-            print(f"Error querying RPM file {self.path}: {e}")
+            print("Error querying RPM file {self.path}: {e}")
             return False
         
     @classmethod

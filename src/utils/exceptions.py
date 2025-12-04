@@ -21,7 +21,7 @@ class ISOCheckError(Exception):
         self.message = message
  
     def __str__(self):
-        return f"ISOCheckError: {self.message}"
+        return "ISOCheckError: {self.message}"
 
 class ReportGenerateError(Exception):
     """app report generate error
@@ -30,7 +30,7 @@ class ReportGenerateError(Exception):
         self.message = message
  
     def __str__(self):
-        return f"ReportGenerateError: {self.message}"
+        return "ReportGenerateError: {self.message}"
 
 class RpmCheckError(Exception):
     """Rpm check exception
@@ -39,4 +39,4 @@ class RpmCheckError(Exception):
         self.message = message
  
     def __str__(self):
-        return f"RpmCheckError: {self.message}"
+        return "RpmCheckError: {self.message}"
