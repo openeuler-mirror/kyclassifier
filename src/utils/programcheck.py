@@ -10,7 +10,6 @@ def find_processes_with_cmdline_keyword(keyword):
         try:
             cmdline = proc.info['cmdline']
             if keyword in ' '.join(cmdline).lower() and proc.info['pid'] != os.getpid():
-                #print(f"PID: {proc.info['pid']}, Name: {proc.info['name']}, Cmdline: {' '.join(cmdline)}")
                 logger.error("Another kyclassifier process is running, the pid = %s " %proc.info['pid'])
                 sys.exit(-1)
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess) as e:

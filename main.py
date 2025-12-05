@@ -123,7 +123,7 @@ if __name__ == '__main__':
         LOGGER.update_console_log(logger)
     
     #进程检查函数
-    find_processes_with_cmdline_keyword('kyclassifier')
+    find_processes_with_cmdline_keyword('/opt/kyclassifier/main.py')
 
     logger.info("Start run kyclassifier...")
     if args.iso:
