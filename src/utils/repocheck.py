@@ -121,7 +121,7 @@ class RepoCheck(object):
             shutil.rmtree(backup_dir)
             return False
         try:
-            cmd = 'dnf clean all $1>/dev/null 2>&1 && dnf makecache  --setopt=retries=1 $1>/dev/null 2>&1'
+            cmd = 'dnf clean all 1>/dev/null 2>&1 && dnf makecache --setopt=retries=1 1>/dev/null 2>&1'
             res = subprocess.call(cmd, shell=True)
         except:
             return False
