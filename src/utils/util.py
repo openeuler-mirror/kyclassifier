@@ -101,9 +101,10 @@ class ISOUtils(object):
                     with open(os.path.join(repodata_dir, save_file), 'wb') as f:
                         iso.get_file_from_iso_fp(f, iso_path=path)
 
-            iso.close()
         except pycdlib.pycdlibexception.PyCdlibException as e:
             pass
+        finally:
+            iso.close()
 
     @staticmethod
     def get_repo_from_dir(repodata_dir=BaseConfig.ISO_REPODATA_DIR):
