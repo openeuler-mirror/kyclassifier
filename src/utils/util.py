@@ -147,4 +147,4 @@ class ISOUtils(object):
             tuple: ISO数据文件路径
         """
         cls.parse_iso_repodata(iso_path,target_dir)
-        return cls.get_repo_from_dir()
+        return cls.get_repo_from_dir(target_dir)
