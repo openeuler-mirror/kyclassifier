@@ -16,6 +16,7 @@
 
 import unittest
 import os
+from unittest import mock
 
 from src.utils.repocheck import RepoCheck
 
@@ -106,6 +107,21 @@ class TestRepoCheck(unittest.TestCase):
             self.assertIn(result, [True, False], "check_repo_useful test failed!")
         except IOError:
             self.skipTest("check_repo_useful test skiped!")
+
+    def test_check_repo_useful_uses_valid_redirection(self):
+        with mock.patch.object(RepoCheck, 'move_repofiles'), \
+             mock.patch.object(RepoCheck, '_load_data', return_value=[{'repo_id': 'base', 'baseurl': 'http://example.com'}]), \
+             mock.patch.object(RepoCheck, '_create_repofile', return_value=True), \
+             mock.patch.object(RepoCheck, 'remove_repofiles'), \
+             mock.patch('src.utils.repocheck.os.path.exists', return_value=True), \
+             mock.patch('src.utils.repocheck.shutil.rmtree'), \
+             mock.patch('src.utils.repocheck.subprocess.call', return_value=0) as call_mock:
+            result = self.repo_check.check_repo_useful()
+        self.assertTrue(result)
+        call_mock.assert_called_once_with(
+            'dnf clean all 1>/dev/null 2>&1 && dnf makecache --setopt=retries=1 1>/dev/null 2>&1',
+            shell=True
+        )
 
     def test_check(self):
         """Test class method check()
