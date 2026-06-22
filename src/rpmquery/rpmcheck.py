@@ -29,7 +29,7 @@ class RpmCheck(object):
         """
             检查软件包存在性
         """
-        return os.path.exists(self.path)
+        return os.path.isfile(self.path)
     
     def check_formate(self):
         try:
